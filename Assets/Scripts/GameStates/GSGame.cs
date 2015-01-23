@@ -23,8 +23,7 @@ public class GSGame : GameState {
 
 	public GSGame() : base() {}
 
-	public override void Enter ()
-	{
+	public override void Enter () {
 		InitFSM();
 		AddListeners();
 	}
@@ -52,26 +51,6 @@ public class GSGame : GameState {
 		Util.Log(this.GetType().Name + "::" + System.Reflection.MethodBase.GetCurrentMethod().Name);
 		
 		//reset vars
-		
-		foreach (ResetInfo info in resetSet)
-		{
-			if (info.t == null) continue;
-			info.t.position = info.position;
-		}
-		
-		foreach (ResetInfo info in resetSet)
-		{
-			if (info.t == null) continue;
-			if (info.t.gameObject == null) continue;
-			
-			GameObject go = info.t.gameObject;
-			
-			bool active = go.activeSelf;
-			go.SetActive(true);
-			go.SendMessage("Init", null, SendMessageOptions.DontRequireReceiver);
-			go.SetActive(active);
-		}
-
 		//reset camera
 	}
 
@@ -82,7 +61,6 @@ public class GSGame : GameState {
 	public void InitUpdate()
 	{
 		ResetState();
-		//fsm.SetState("Generate");	
 		
 		if (GetNotifyMgr() != null)
 			GetNotifyMgr().PostNotify(NotifyType.GameInitState, this);

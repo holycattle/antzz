@@ -64,7 +64,7 @@ public class GameMgr : MonoBehaviour {
 		instance = this;
 
 		// Create the major game states
-		gameStateMgr.Add("game", 	new GSGame());
+		gameStateMgr.Add("game", 	new GSGame(), true);
 
         GetNotifyMgr().AddListener(NotifyType.LoadGameSceneDone, OnLoadGameSceneDone);
 	}
