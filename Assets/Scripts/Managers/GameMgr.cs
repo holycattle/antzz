@@ -65,6 +65,8 @@ public class GameMgr : MonoBehaviour {
 
 		// Create the major game states
 		gameStateMgr.Add("game", 	new GSGame());
+
+        GetNotifyMgr().AddListener(NotifyType.LoadGameSceneDone, OnLoadGameSceneDone);
 	}
 	
 	//--------------------------------------------------------------------------------
@@ -98,26 +100,6 @@ public class GameMgr : MonoBehaviour {
 	//--------------------------------------------------------------------------------
 	void OnGUI() {}
 	
-	public void StartLoading() {
-		StartCoroutine(LoadingCoroutine());
-	}
-	
-	private IEnumerator LoadingCoroutine() {
-		yield return new WaitForEndOfFrame();
-		yield return new WaitForEndOfFrame();
-		
-		/*if (audio != null && audioMgr != null && audioMgr.IsSfxEnabled())
-			audio.Play();*/
-		
-		yield return new WaitForEndOfFrame();
-		
-		Application.LoadLevelAdditive("_Data");
-		
-		SceneLoader sl = GetComponent<SceneLoader>();
-		if (sl != null)
-			sl.StartLoading();
-	}
-	
 	public void GarbageCollect(float delay = 0.0f) {
 		StartCoroutine(GarbageCollectCR(delay));
 	}
@@ -135,14 +117,15 @@ public class GameMgr : MonoBehaviour {
 	
 	//--------------------------------------------------------------------------------
 	/// Notify handler for load finished.
-	/// Initialize autio manager here
-	void OnLoadFinished(Notify n) {
+	void OnLoadGameSceneDone(Notify n) {
 		isLoading = false;
 
 		/*if (audioMgr != null)
 			audioMgr.Init();*/
 
-		gameStateMgr.SetState("game");
+        Debug.Log("load finished");
+
+        GetNotifyMgr().RemoveListener(NotifyType.LoadGameSceneDone, OnLoadGameSceneDone);
 	}
 
 	public void OnApplicationFocus(bool focus) {

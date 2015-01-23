@@ -7,22 +7,28 @@ public class SceneLoader : ExtBehaviour
 
     IEnumerator Start() {
         loadOp = Application.LoadLevelAdditiveAsync("MainScene");
-        yield return async;
+        yield return loadOp;
     }
 
     void Update() {
-        if (loadOp.isDone) {
-            //load stuff into GameMgr game object
-            GameObject goRoot = Util.Find(gameObject, "Root");
-            if (goRoot != null) {
-                foreach (Transform child in goRoot.transform) {
-                    child.parent = goRoot.transform;
-                }
+        if (loadOp == null || !loadOp.isDone)
+            return;
+
+        //load stuff into GameMgr game object
+        GameObject goRoot = GameObject.Find("Root");
+        if (goRoot != null) {
+            Debug.Log(goRoot);
+            while (goRoot.transform.childCount > 0) {
+                goRoot.transform.GetChild(0).parent = gameObject.transform;
             }
 
-            //once loading is done, destroy this script
             Destroy(goRoot);
+
+            GetNotifyMgr().PostNotify(NotifyType.LoadGameSceneDone, this);
+
+            //once loading is done, destroy this script
             Destroy(this);
         }
+
     }
 }
