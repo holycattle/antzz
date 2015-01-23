@@ -5,10 +5,12 @@ public class InputHandler : MonoBehaviour {
 
 	public float heatRadius = 0.5f;
 
+	ScalarGrid grid;
 	Camera mainCamera;
 
 	void Start() {
 		mainCamera = Camera.main;
+		grid = GetComponent<ScalarGrid>();
 	}
 
 	void Update() {
