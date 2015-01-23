@@ -7,21 +7,18 @@ using System.Collections.Generic;
 // IMPORTANT: Make this script exectute after Realtime.
 // Go to Edit > Project Settings > Script Execution Order
 //
-public class GameMgr : MonoBehaviour
-{		
+public class GameMgr : MonoBehaviour {		
 	byte[] buffer;
 	
 	//--------------------------------------------------------------------------------
 	private static GameMgr instance;
-	public static GameMgr Instance
-	{
+	public static GameMgr Instance {
 		get { return instance; }
 	}
 	
 	//--------------------------------------------------------------------------------
 	private NotifyMgr notifyMgr = new NotifyMgr();
-	public NotifyMgr GetNotifyMgr()
-	{
+	public NotifyMgr GetNotifyMgr() {
 		return notifyMgr;
 	}
 	

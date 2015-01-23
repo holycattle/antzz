@@ -17,4 +17,4 @@
 sysinfo.txt
 
 #vim crap
-*.sw[a-z]
+*.swp
