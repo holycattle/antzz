@@ -73,7 +73,7 @@ public class ScalarGrid : MonoBehaviour {
 	}
 
 	public float Sub(int i, float val) {
-		grid[i] = Mathf.Clamp01(grid[i] + val);
+		grid[i] = Mathf.Clamp01(grid[i] - val);
 		if (grid[i] == 0) {
 			activeIndices.Remove(i);
 		}
