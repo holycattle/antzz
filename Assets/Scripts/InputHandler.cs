@@ -16,14 +16,18 @@ public class InputHandler : MonoBehaviour {
 	void Update() {
 		if (Input.touchCount > 0) {
 			for (int i = 0; i < Input.touchCount; i++) {
-				HandleTouch(Input.GetTouch(i));
+				HandleTouch(Input.GetTouch(i).position);
+			}
+		} else {
+			if (Input.GetMouseButton(0)) {
+				HandleTouch(Input.mousePosition);
 			}
 		}
 	}
 
-	public void HandleTouch(Touch t) {
-		Vector3 floorPoint = RaycastToFloor(t.position);
-
+	public void HandleTouch(Vector3 screenPoint) {
+		Vector3 floorPoint = RaycastToFloor(screenPoint);
+		grid.HeatPoint(floorPoint, heatRadius);
 	}
 
 	public Vector3 RaycastToFloor(Vector3 screenPoint) {

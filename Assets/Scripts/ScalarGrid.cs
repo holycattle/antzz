@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ScalarGrid : MonoBehaviour {
 
@@ -7,6 +8,9 @@ public class ScalarGrid : MonoBehaviour {
 	public float zSize;
 	public float gridSize;
 
+	public float decayRate = 4f; // value per second (default = depletes completely in 1/4th second)
+
+	List<int> activeIndices;
 	float[] grid;
 	int width;
 	int height;
@@ -17,7 +21,9 @@ public class ScalarGrid : MonoBehaviour {
 		width = Mathf.CeilToInt(xSize / gridSize);
 		height = Mathf.CeilToInt(zSize / gridSize);
 		grid = new float[width * height];
-//		Debug.Log("Grid Size: " + width + "x" + height + " = " + grid.Length);
+
+		activeIndices = new List<int>((int)(grid.Length * 0.4f));
+		Debug.Log("Grid Size: " + width + "x" + height + " = " + grid.Length);
 	}
 
 	void Start() {
@@ -29,6 +35,11 @@ public class ScalarGrid : MonoBehaviour {
 	}
 
 	void Update() {
+		float amt = Time.deltaTime * decayRate;
+		for (int i = 0; i < activeIndices.Count; i++) {
+			Sub(activeIndices[i], amt);
+		}
+
 		if (showGridValues) {
 			for (int x = 0; x < width; x++) {
 				for (int y = 0; y < height; y++) {
@@ -50,25 +61,33 @@ public class ScalarGrid : MonoBehaviour {
 
 		for (int x = x1; x <= x2; x++) {
 			for (int z = z1; z <= z2; z++) {
-				Debug.DrawRay(Pos(x, z), Vector3.up, Color.green, 10f);
+				Add(x, z, intensity);
 			}
 		}
-
-//		Debug.Log(x1 + ", " + z1 + " > " + x2 + ", " + z2);
-//		Debug.Log(Pos(x1, z1) + " > " + Pos(x2, z2));
-//		Debug.DrawRay(Pos(x1, z1), Vector3.up, Color.green, 10f);
-//		Debug.DrawRay(Pos(x2, z2), Vector3.up, Color.green, 10f);
 	}
 
 	// ========================================== HELPERS ========================================== //
-	public float Add(int x, int z, int val) {
+	public float Add(int x, int z, float val) {
+		activeIndices.Add(z * width + x);
 		return grid[z * width + x] = Mathf.Clamp01(grid[z * width + x] + val);
 	}
 
-	public float Set(int x, int z, int val) {
-		return grid[z * width + x] = Mathf.Clamp01(val);
+	public float Sub(int i, float val) {
+		grid[i] = Mathf.Clamp01(grid[i] + val);
+		if (grid[i] == 0) {
+			activeIndices.Remove(i);
+		}
+		return grid[i];
+	}
+	
+	public float Set(int x, int z, float val) {
+		return Set(z * width + x, val);
 	}
 
+	public float Set(int i, float val) {
+		return grid[i] = Mathf.Clamp01(val);
+	}
+    
 	public int ClosestIndex(float x, float z) {
 		return Mathf.RoundToInt((SMath.FloorMultiple(z, gridSize) / gridSize) * width + (SMath.FloorMultiple(x, gridSize) / gridSize));
 	}
