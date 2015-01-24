@@ -3,15 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ScalarGrid : ExtBehaviour {
-    const float foodYPos = 0.15f;
-    const float minFoodZPos = -4f;
-    const float maxFoodZPos = 4f;
+	const float foodYPos = 0.15f;
+	const float minFoodZPos = -4f;
+	const float maxFoodZPos = 4f;
 
 	public float xSize;
 	public float zSize;
 	public float gridSize;
-    private float spawnDelay;
-    private float foodSpawnDelay;
+	private float spawnDelay;
+	private float foodSpawnDelay;
 	public GameObject[] spawnPoints = new GameObject[2];
 	public float decayRate = 4f; // value per second (default = depletes completely in 1/4th second)
 
@@ -40,8 +40,8 @@ public class ScalarGrid : ExtBehaviour {
 		spawnPoints[0] = Util.Find(gameObject, "SpawnPoint0");
 		spawnPoints[1] = Util.Find(gameObject, "SpawnPoint1");
 
-        spawnDelay = GetResourceMgr().antSpawnDelay;
-        foodSpawnDelay = GetResourceMgr().foodSpawnDelay;
+		spawnDelay = GetResourceMgr().antSpawnDelay;
+		foodSpawnDelay = GetResourceMgr().foodSpawnDelay;
 	}
 
 	void Update() {
@@ -82,7 +82,7 @@ public class ScalarGrid : ExtBehaviour {
 	}
 
 	public float Add(int i, float val) {
-		if (i < 0 || i > grid.Length) {
+		if (IOOB(i)) {
 			return -1f;
 		}
 		activeIndices.Add(i);
@@ -90,7 +90,7 @@ public class ScalarGrid : ExtBehaviour {
 	}
 
 	public float Sub(int i, float val) {
-		if (i < 0 || i > grid.Length) {
+		if (IOOB(i)) {
 			return -1f;
 		}
 
@@ -159,7 +159,7 @@ public class ScalarGrid : ExtBehaviour {
 	}
 
 	public bool IOOB(int i) {
-		return i < 0 || i > grid.Length;
+		return i < 0 || i >= grid.Length;
 	}
 
 	public virtual Ant SpawnAnt() {
@@ -174,12 +174,12 @@ public class ScalarGrid : ExtBehaviour {
 		return newAnt.GetComponent<Ant>();
 	}
 
-    public virtual Food SpawnFood() {
-        GameObject newFood = (GameObject)Instantiate(GetResourceMgr().goFood);
-        newFood.transform.parent = gameObject.transform;
-        Vector3 rndPos = new Vector3(Random.Range(-7f, 7f), foodYPos, Random.Range(minFoodZPos, maxFoodZPos));
-        newFood.transform.localPosition = rndPos;
+	public virtual Food SpawnFood() {
+		GameObject newFood = (GameObject)Instantiate(GetResourceMgr().goFood);
+		newFood.transform.parent = gameObject.transform;
+		Vector3 rndPos = new Vector3(Random.Range(-7f, 7f), foodYPos, Random.Range(minFoodZPos, maxFoodZPos));
+		newFood.transform.localPosition = rndPos;
 
-        return newFood.GetComponent<Food>();
-    }
+		return newFood.GetComponent<Food>();
+	}
 }

@@ -7,7 +7,6 @@ public class AntController : ExtBehaviour {
 	public float rotateSpeed = 360f; // degrees per second
 	public float scanRadius = 1f;
 	public float scanArc = 180f;
-
 	ScalarGrid grid;
 	ZoneController capturedZoneController;
 
@@ -18,6 +17,7 @@ public class AntController : ExtBehaviour {
 	
 	void Update() {
 		if (capturedZoneController != null) {
+			Debug.Log("Captured Zone");
 			Vector3 q = Quaternion.LookRotation(capturedZoneController.transform.position - transform.position).eulerAngles;
 			q.x = 0f;
 			q.z = 0f;
@@ -30,6 +30,8 @@ public class AntController : ExtBehaviour {
 	}
 
 	float Scan() {
+		bool wasTargetDirUpdated = false;
+		bool hasNonZeroScalarGrid = false;
 		Vector2 targetDir = Vector2.zero;
 
 		Vector2 pos = new Vector2(transform.position.x, transform.position.z);
@@ -44,8 +46,17 @@ public class AntController : ExtBehaviour {
 
 				if (Vector2.Angle(forward, dir) < scanArc / 2) {
 					targetDir += dir * Mathf.Clamp01(1 - dir.magnitude / scanRadius) * Mathf.Clamp01(1 - vectors[i].y);
+
+					wasTargetDirUpdated = true;
+					if (vectors[i].y > 0) {
+						hasNonZeroScalarGrid = true;
+					}
 				}
 			}
+		}
+
+		if (!wasTargetDirUpdated || !hasNonZeroScalarGrid) {
+			return 0f;
 		}
 
 //		Debug.DrawRay(transform.position, new Vector3(targetDir.x, 0f, targetDir.y).normalized * 5f, Color.blue);
