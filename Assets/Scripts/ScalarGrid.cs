@@ -7,16 +7,13 @@ public class ScalarGrid : ExtBehaviour {
 	public float xSize;
 	public float zSize;
 	public float gridSize;
-
-    public GameObject[] spawnPoints = new GameObject[2];
-
+	public GameObject[] spawnPoints = new GameObject[2];
 	public float decayRate = 4f; // value per second (default = depletes completely in 1/4th second)
 
 	List<int> activeIndices;
 	float[] grid;
 	int width;
 	int height;
-
 	public bool showGridValues;
 
 	void Awake() {
@@ -35,8 +32,8 @@ public class ScalarGrid : ExtBehaviour {
 //		Debug.DrawRay(Pos(2289), Vector3.up, Color.blue, 10f);
 //		HeatPoint(new Vector3(12.34f, 0f, 8.9f), 0.5f);
 //
-        spawnPoints[0] = Util.Find(gameObject, "SpawnPoint0");
-        spawnPoints[1] = Util.Find(gameObject, "SpawnPoint1");
+		spawnPoints[0] = Util.Find(gameObject, "SpawnPoint0");
+		spawnPoints[1] = Util.Find(gameObject, "SpawnPoint1");
 	}
 
 	void Update() {
@@ -128,14 +125,18 @@ public class ScalarGrid : ExtBehaviour {
 		return i / width;
 	}
 
-    public virtual Ant SpawnAnt() {
-        System.Random rnd = new System.Random();
-        int i = rnd.Next(0, 2);
+	public virtual Ant SpawnAnt() {
+		System.Random rnd = new System.Random();
+		int i = rnd.Next(0, 2);
 
-        GameObject newAnt = Instantiate(GetResourceMgr().goAnt, spawnPoints[i].transform.position, Quaternion.identity) as GameObject;
-        newAnt.transform.parent = gameObject.transform;
-        newAnt.transform.localPosition = spawnPoints[i].transform.localPosition;
+		if (spawnPoints[i] == null) {
+			Debug.Log("Null");
+		}
 
-        return newAnt.GetComponent<Ant>();
-    }
+		GameObject newAnt = Instantiate(GetResourceMgr().goAnt, spawnPoints[i].transform.position, Quaternion.identity) as GameObject;
+		newAnt.transform.parent = gameObject.transform;
+		newAnt.transform.localPosition = spawnPoints[i].transform.localPosition;
+
+		return newAnt.GetComponent<Ant>();
+	}
 }
