@@ -7,6 +7,7 @@ public class ScalarGrid : ExtBehaviour {
 	public float xSize;
 	public float zSize;
 	public float gridSize;
+    public float spawnDelay;
 	public GameObject[] spawnPoints = new GameObject[2];
 	public float decayRate = 4f; // value per second (default = depletes completely in 1/4th second)
 

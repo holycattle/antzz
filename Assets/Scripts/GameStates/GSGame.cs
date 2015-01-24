@@ -19,6 +19,8 @@ public class GSGame : GameState {
 
     private Queue<Ant>          antList = new Queue<Ant>();
 
+    private Counter             spawnDelay = new Counter();
+
 	private FSM 				fsm = new FSM();
 	private List<ResetInfo> 	resetSet = new List<ResetInfo>();
 
@@ -28,6 +30,8 @@ public class GSGame : GameState {
 	public override void Enter() {
 		InitFSM();
 		AddListeners();
+
+        spawnDelay.SetLimit(GameMgr.Instance.grid.spawnDelay);
 	}
 	
 	// Update is called once per frame
@@ -79,11 +83,16 @@ public class GSGame : GameState {
     public void PlayUpdate() {
         ResourceMgr resourceMgr = GameMgr.Instance.GetResourceMgr();
 
-        if (antList.Count < resourceMgr.maxAnts)
+        if (antList.Count < resourceMgr.maxAnts && spawnDelay.IsReady())
         {
             Ant newAnt = GameMgr.Instance.grid.SpawnAnt();
-            antList.Enqueue(newAnt);
+            if (newAnt != null)
+                antList.Enqueue(newAnt);
+
+            spawnDelay.Reset();
         }
+
+        spawnDelay.Update(Time.deltaTime);        
     }
 
     public void PlayExit() {
