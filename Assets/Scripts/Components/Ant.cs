@@ -29,7 +29,5 @@ public class Ant : ExtBehaviour {
 		Vector3 oldPos = gameObject.transform.position;
 		g.transform.position = new Vector3(oldPos.x, oldPos.y + 0.25f, oldPos.z);
 		g.transform.parent = gameObject.transform;
-
-		Debug.Log("collided!");
 	}
 }

@@ -177,9 +177,24 @@ public class AntController : ExtBehaviour {
 	}
 
 	public void OnExitBounds() {
-		if (capturedZoneController == null) {
-			GetComponent<Ant>().KillAnt();
+		Vector3 v = Camera.main.WorldToViewportPoint(transform.position);
+		Debug.Log("View:" + v);
+
+		Vector3 offset = Vector3.zero;
+		if (v.x <= 0 || v.x >= 1) {
+			if (capturedZoneController == null) {
+				GetComponent<Ant>().KillAnt();
+			}
+		} else if (v.y < 0) {
+			offset = Vector3.forward * 9f;
+			Debug.Log("Exit Bot");
+		} else if (v.y > 1) {
+			offset = -Vector3.forward * 9f;
+		} else {
+			Debug.LogError("Shit I didnt do something");
 		}
+
+		transform.position += offset;
 	}
 
 	public void OnEnterAnthillRadius(ZoneController zone) { // Don't change the name of this function, it's called via a SendMessage()
