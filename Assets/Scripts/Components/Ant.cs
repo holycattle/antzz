@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Ant : ExtBehaviour {
 	public bool hasFood { get; internal set; }
+	public bool isInTrigger;
 
 	public void KillAnt() {
 		Destroy(gameObject);

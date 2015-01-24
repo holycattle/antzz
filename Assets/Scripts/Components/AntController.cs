@@ -66,6 +66,12 @@ public class AntController : ExtBehaviour {
 		return SMath.SignedAngleBetween(forward, targetDir.normalized, Vector3.back);
 	}
 
+	public void OnExitBounds() {
+		if (capturedZoneController == null) {
+			GetComponent<Ant>().KillAnt();
+		}
+	}
+
 	public void OnEnterAnthillRadius(ZoneController zone) { // Don't change the name of this function, it's called via a SendMessage()
 		capturedZoneController = zone;
 	}
