@@ -17,7 +17,6 @@ public class AntController : ExtBehaviour {
 	
 	void Update() {
 		if (capturedZoneController != null) {
-			Debug.Log("Captured Zone");
 			Vector3 q = Quaternion.LookRotation(capturedZoneController.transform.position - transform.position).eulerAngles;
 			q.x = 0f;
 			q.z = 0f;

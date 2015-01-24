@@ -2,29 +2,33 @@
 using System.Collections;
 
 public class Ant : ExtBehaviour {
-    private bool hasFood;
+	public bool hasFood { get; internal set; }
 
-    void OnCollisionEnter(Collision c) {
-        CollectFood(c.gameObject);
-    }
+	public void KillAnt() {
+		Destroy(gameObject);
+	}
 
-    void CollectFood(GameObject g) {
-        Food f = g.GetComponent<Food>();
-        if (f == null || f.IsOwned() || hasFood)
-            return;
+	void OnCollisionEnter(Collision c) {
+		CollectFood(c.gameObject);
+	}
 
-        hasFood = true;
+	void CollectFood(GameObject g) {
+		Food f = g.GetComponent<Food>();
+		if (f == null || f.IsOwned() || hasFood)
+			return;
 
-        int layerIndex = LayerMask.NameToLayer("AntWithFood");
-        gameObject.layer = layerIndex;
-        foreach (Transform t in gameObject.transform)
-            t.gameObject.layer = layerIndex;
+		hasFood = true;
 
-        f.SetIsOwned(true);        
-        Vector3 oldPos = gameObject.transform.position;
-        g.transform.position = new Vector3(oldPos.x, oldPos.y + 0.25f, oldPos.z);
-        g.transform.parent = gameObject.transform;
+		int layerIndex = LayerMask.NameToLayer("AntWithFood");
+		gameObject.layer = layerIndex;
+		foreach (Transform t in gameObject.transform)
+			t.gameObject.layer = layerIndex;
 
-        Debug.Log("collided!");
-    }
+		f.SetIsOwned(true);        
+		Vector3 oldPos = gameObject.transform.position;
+		g.transform.position = new Vector3(oldPos.x, oldPos.y + 0.25f, oldPos.z);
+		g.transform.parent = gameObject.transform;
+
+		Debug.Log("collided!");
+	}
 }

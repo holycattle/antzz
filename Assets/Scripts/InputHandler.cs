@@ -84,7 +84,12 @@ public class InputHandler : ExtBehaviour {
 			wasNew = true;
 		}
 
-		Vector3 floorPoint = RaycastToFloor(screenPoint);
+		Vector3? rayHit = RaycastToFloor(screenPoint);
+		if (rayHit == null) {
+			return;
+		}
+
+		Vector3 floorPoint = rayHit.Value;
 		HeatParticles touchParticles = particles.Get(touch.particleIndex);
 
 		if (wasNew) {
@@ -108,14 +113,13 @@ public class InputHandler : ExtBehaviour {
 		touch.wasUpdated = true;
 	}
 
-	public Vector3 RaycastToFloor(Vector3 screenPoint) {
+	public Vector3? RaycastToFloor(Vector3 screenPoint) {
 		Ray r = mainCamera.ScreenPointToRay(screenPoint);
 		RaycastHit hit;
 		if (Physics.Raycast(r, out hit, Mathf.Infinity)) {
 			return hit.point;
 		}
-		Debug.LogError("The raycast missed! It shouldn't have missed!");
-		return Vector3.zero;
+		return null;
 	}
 
 	private class FingerTouch {

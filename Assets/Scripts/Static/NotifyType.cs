@@ -15,5 +15,7 @@ public enum NotifyType {
 
 	LoadGameSceneDone       = 40,
 
-	TouchHappened			= 50
+	TouchHappened			= 50,
+
+	AntDeath				= 100
 }
