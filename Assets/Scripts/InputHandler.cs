@@ -115,7 +115,7 @@ public class InputHandler : ExtBehaviour {
 			return hit.point;
 		}
 		Debug.LogError("The raycast missed! It shouldn't have missed!");
-		return Vector3.one * Mathf.Infinity;
+		return Vector3.zero;
 	}
 
 	private class FingerTouch {
