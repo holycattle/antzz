@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 
 public class Counter {
+    //TODO: add a callback that automatically gets called when finished
+
 	public float limit 	{ get; set; }
 	public float current { get; set; }
 	
