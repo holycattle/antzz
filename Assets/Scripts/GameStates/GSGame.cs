@@ -16,7 +16,9 @@ public struct ResetInfo {
 public class GSGame : GameState {
 	private GameObject 			goPlayer = null;
 	private GameObject 			goCamera = null;
-    private GameObject[]        spawnPoints = new GameObject[2];
+
+    private Queue<Ant>          antList = new Queue<Ant>();
+
 	private FSM 				fsm = new FSM();
 	private List<ResetInfo> 	resetSet = new List<ResetInfo>();
 
@@ -26,9 +28,6 @@ public class GSGame : GameState {
 	public override void Enter() {
 		InitFSM();
 		AddListeners();
-
-        spawnPoints[0] = Util.Find(GameMgr.Instance.gameObject, "SpawnPoint0");
-        spawnPoints[1] = Util.Find(GameMgr.Instance.gameObject, "SpawnPoint1");
 	}
 	
 	// Update is called once per frame
@@ -40,6 +39,7 @@ public class GSGame : GameState {
 
 	void InitFSM() {
 		fsm.AddState("Init", InitEnter, InitUpdate, InitExit, true);
+        fsm.AddState("Play", PlayEnter, PlayUpdate, PlayExit);
 	}
 
 	void AddListeners() {
@@ -59,25 +59,34 @@ public class GSGame : GameState {
 
 #region Init state
 	public void InitEnter() {
-        RandomSpawn();
+        //RandomSpawn(10);
 
         if (GetNotifyMgr() != null)
 			GetNotifyMgr().PostNotify(NotifyType.GameInitState, this);
 	}
 
 	public void InitUpdate() {
-
+        fsm.SetState("Play");
 	}
 
 	public void InitExit() {
 	}
 #endregion
 
-    public virtual void RandomSpawn() {
-        System.Random rnd = new System.Random();
-        int index = rnd.Next(0, 2);
-        GameObject p = spawnPoints[index];
+    public void PlayEnter() {
+    }
 
-        //GameObject newAnt = Instantiate(GetResourceMgr().goAnt, p.transform.position, Quaternion.identity);
+    public void PlayUpdate() {
+        ResourceMgr resourceMgr = GameMgr.Instance.GetResourceMgr();
+
+        if (antList.Count < resourceMgr.maxAnts)
+        {
+            Ant newAnt = GameMgr.Instance.grid.SpawnAnt();
+            antList.Enqueue(newAnt);
+        }
+    }
+
+    public void PlayExit() {
+
     }
 }

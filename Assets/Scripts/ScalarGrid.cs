@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ScalarGrid : MonoBehaviour {
+public class ScalarGrid : ExtBehaviour {
 
 	public float xSize;
 	public float zSize;
 	public float gridSize;
+
+    private GameObject[] spawnPoints = new GameObject[2];
 
 	public float decayRate = 4f; // value per second (default = depletes completely in 1/4th second)
 
@@ -32,6 +34,9 @@ public class ScalarGrid : MonoBehaviour {
 //		Debug.Log(Pos(2289));
 //		Debug.DrawRay(Pos(2289), Vector3.up, Color.blue, 10f);
 //		HeatPoint(new Vector3(12.34f, 0f, 8.9f), 0.5f);
+//
+        spawnPoints[0] = Util.Find(gameObject, "SpawnPoint0");
+        spawnPoints[1] = Util.Find(gameObject, "SpawnPoint1");
 	}
 
 	void Update() {
@@ -111,4 +116,15 @@ public class ScalarGrid : MonoBehaviour {
 	public int IndexZ(int i) {
 		return i / width;
 	}
+
+    public virtual Ant SpawnAnt() {
+        System.Random rnd = new System.Random();
+        int i = rnd.Next(0, 2);
+
+        GameObject newAnt = Instantiate(GetResourceMgr().goAnt, spawnPoints[i].transform.position, Quaternion.identity) as GameObject;
+        newAnt.transform.parent = gameObject.transform;
+        newAnt.transform.localPosition = spawnPoints[i].transform.localPosition;
+
+        return newAnt.GetComponent<Ant>();
+    }
 }
