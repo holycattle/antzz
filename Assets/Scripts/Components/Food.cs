@@ -1,15 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Food : MonoBehaviour {
+public class Food : ExtBehaviour {
+    private bool isOwned;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public bool IsOwned() {
+        return isOwned;
+    }
+
+    public void SetIsOwned(bool s) {
+        isOwned = s;
+    }
 }
