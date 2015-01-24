@@ -35,6 +35,7 @@ public class AntController : ExtBehaviour {
 
 		Vector2 pos = new Vector2(transform.position.x, transform.position.z);
 		Vector2 forward = new Vector2(transform.forward.x, transform.forward.z);
+		pos = pos - forward.normalized * 0.25f;
 
 		Vector3[] vectors = grid.SquaresInBox(transform.position, scanRadius);
 		for (int i = 0; i < vectors.Length; i++) {
