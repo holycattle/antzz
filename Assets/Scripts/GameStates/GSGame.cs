@@ -87,9 +87,11 @@ public class GSGame : GameState {
         System.Random rnd = new System.Random();
         GameObject go = GameMgr.Instance.grid.SpawnObstacle(rnd.Next(0, 2));
 
-        if (go == null)
+        if (go == null) {
+            //raycast magic here
             fsm.SetState("Play");
-	}
+	    }
+    }
 
 	public void InitExit() {
 	}
