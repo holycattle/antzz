@@ -14,16 +14,10 @@ public struct ResetInfo {
 };
 
 public class GSGame : GameState {
-	[HideInInspector]
-	public float
-		currentObstacleArea = 0f;
+	public float currentObstacleArea = 0f;
 
 	private GameObject 			goPlayer = null;
 	private GameObject 			goCamera = null;
-
-//    private Queue<Ant>          antList = new Queue<Ant>();
-//    private Queue<Food>         foodList = new Queue<Food>();
-	private List<Ant>			antList = new List<Ant>();
 
 	private Counter             gameTimer = new Counter();
 	private Counter             spawnDelay = new Counter();
@@ -88,12 +82,10 @@ public class GSGame : GameState {
 
 	public void InitUpdate() {
 		System.Random rnd = new System.Random();
-		GameObject go = GameMgr.Instance.grid.SpawnObstacle(rnd.Next(0, 2));
+		GameMgr.Instance.grid.SpawnObstacles();
 
-		if (go == null) {
-			GameMgr.Instance.grid.SetupLockedIndices();
-			fsm.SetState("Play");
-		}
+		GameMgr.Instance.grid.SetupLockedIndices();
+		fsm.SetState("Play");
 	}
 
 	public void InitExit() {
@@ -179,12 +171,6 @@ public class GSGame : GameState {
 		} else {
 			foodSpawnDelay.Update(Time.deltaTime);
 		}
-	}
-
-	//move this crap to ScalarGrid
-	private void SpawnObstacles() {
-		System.Random rnd = new System.Random();
-		GameMgr.Instance.grid.SpawnObstacle(rnd.Next(0, 2));
 	}
 
 	private void PopulateNeutralInices() {

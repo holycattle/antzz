@@ -17,5 +17,7 @@ public enum NotifyType {
 
 	TouchHappened			= 50,
 
-    GameTimerUp             = 60,
+	GameTimerUp             = 60,
+
+	NewGame					= 70
 }
