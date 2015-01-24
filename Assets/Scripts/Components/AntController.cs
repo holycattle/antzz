@@ -6,7 +6,7 @@ public class AntController : ExtBehaviour {
 	public float moveSpeed = 1f; // units per second
 	public float rotateSpeed = 360f; // degrees per second
 	public float scanRadius = 1f;
-	public float scanArc = 90f;
+	public float scanArc = 180f;
 
 	ScalarGrid grid;
 
@@ -42,11 +42,11 @@ public class AntController : ExtBehaviour {
 			}
 		}
 
-		Debug.DrawRay(transform.position, new Vector3(targetDir.x, 0f, targetDir.y).normalized * 5f, Color.blue);
+//		Debug.DrawRay(transform.position, new Vector3(targetDir.x, 0f, targetDir.y).normalized * 5f, Color.blue);
 //		Debug.Log("Scanulating:" + targetDir);
 //		return Vector2.Angle(forward, targetDir);
-		Debug.Log(forward);
-		Debug.Log(targetDir);
+//		Debug.Log(forward);
+//		Debug.Log(targetDir);
 		return SMath.SignedAngleBetween(forward, targetDir.normalized, Vector3.back);
 	}
 
