@@ -15,7 +15,11 @@ public class GameState {
 	public NotifyMgr GetNotifyMgr() {
 		return GameMgr.Instance.GetNotifyMgr();
 	}
-	
+
+    public ResourceMgr GetResourceMgr() {
+        return GameMgr.Instance.GetResourceMgr();
+    }
+
 	/*public UIMgr GetUIMgr() {
 		return GameMgr.Instance.GetUIMgr();
 	}*/

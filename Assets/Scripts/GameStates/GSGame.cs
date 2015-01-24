@@ -20,6 +20,7 @@ public class GSGame : GameState {
     private Queue<Ant>          antList = new Queue<Ant>();
     private Queue<Food>         foodList = new Queue<Food>();
 
+    private Counter             gameTimer = new Counter();
     private Counter             spawnDelay = new Counter();
     private Counter             foodSpawnDelay = new Counter();
 
@@ -33,8 +34,9 @@ public class GSGame : GameState {
 		InitFSM();
 		AddListeners();
 
-        spawnDelay.SetLimit(GameMgr.Instance.GetResourceMgr().antSpawnDelay);
-        foodSpawnDelay.SetLimit(GameMgr.Instance.GetResourceMgr().foodSpawnDelay);
+        gameTimer.SetLimit(GetResourceMgr().gameDuration);
+        spawnDelay.SetLimit(GetResourceMgr().antSpawnDelay);
+        foodSpawnDelay.SetLimit(GetResourceMgr().foodSpawnDelay);
 	}
 	
 	// Update is called once per frame
@@ -47,6 +49,7 @@ public class GSGame : GameState {
 	void InitFSM() {
 		fsm.AddState("Init", InitEnter, InitUpdate, InitExit, true);
         fsm.AddState("Play", PlayEnter, PlayUpdate, PlayExit);
+        fsm.AddState("End",  EndEnter,  EndUpdate,  EndExit);
 	}
 
 	void AddListeners() {
@@ -67,7 +70,10 @@ public class GSGame : GameState {
 #region Init state
 	public void InitEnter() {
         //RandomSpawn(10);
-
+        gameTimer.Reset();
+        spawnDelay.Reset();
+        foodSpawnDelay.Reset();
+            
         if (GetNotifyMgr() != null)
 			GetNotifyMgr().PostNotify(NotifyType.GameInitState, this);
 	}
@@ -84,11 +90,37 @@ public class GSGame : GameState {
     }
 
     public void PlayUpdate() {
+        gameTimer.Update(Time.deltaTime);
         SpawnAnt();
         SpawnFood();
+
+        if (gameTimer.IsReady()) {
+            GetNotifyMgr().PostNotify(NotifyType.GameTimerUp, this);
+            fsm.SetState("End");
+        }
     }
 
     public void PlayExit() {
+
+    }
+
+    public void EndEnter() {
+        Debug.Log("game ended!");
+
+        Ant[] ants = GameMgr.Instance.gameObject.GetComponentsInChildren<Ant>();
+        foreach (Ant a in ants)
+            GameObject.Destroy(a.gameObject);
+
+        Food[] foodArr = GameMgr.Instance.gameObject.GetComponentsInChildren<Food>();
+        foreach (Food f in foodArr)
+            GameObject.Destroy(f.gameObject);
+    }
+
+    public void EndUpdate() {
+
+    }
+
+    public void EndExit() {
 
     }
 

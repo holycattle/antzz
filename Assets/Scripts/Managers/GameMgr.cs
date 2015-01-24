@@ -89,35 +89,34 @@ public class GameMgr : MonoBehaviour
 	
 		//--------------------------------------------------------------------------------
 		/// Use this for initialization
-		void Start ()
-		{
-				Application.targetFrameRate = 60;
-		
-				// Get References of all important objects
-				this.grid = GetComponentInChildren<ScalarGrid> ();
-				this.inputter = GetComponentInChildren<InputHandler> ();
-				this.particles = GetComponentInChildren<ParticleHandler> ();
+		void Start () {
+            Application.targetFrameRate = 60;
+    
+            // Get References of all important objects
+            this.grid = GetComponentInChildren<ScalarGrid> ();
+            this.inputter = GetComponentInChildren<InputHandler> ();
+            this.particles = GetComponentInChildren<ParticleHandler> ();
 
-				#if !(UNITY_EDITOR)
-		Util.LogWarning("System Memory " + SystemInfo.systemMemorySize);
-		Util.LogWarning("GPU Memory " + SystemInfo.graphicsMemorySize);
-		
-		if ((Screen.width * Screen.height) <= (1280 * 800)) {
-			QualitySettings.masterTextureLimit = 1;
-			Util.LogWarning("Using half texture size");
-		} else {
-			QualitySettings.masterTextureLimit = 0;
-			Util.LogWarning("Using full texture size");
-		}
-				#endif
-		}
+            #if !(UNITY_EDITOR)
+                Util.LogWarning("System Memory " + SystemInfo.systemMemorySize);
+                Util.LogWarning("GPU Memory " + SystemInfo.graphicsMemorySize);
+                
+                if ((Screen.width * Screen.height) <= (1280 * 800)) {
+                    QualitySettings.masterTextureLimit = 1;
+                    Util.LogWarning("Using half texture size");
+                } else {
+                    QualitySettings.masterTextureLimit = 0;
+                    Util.LogWarning("Using full texture size");
+                }
+            #endif
+        }
 	
 		//--------------------------------------------------------------------------------
 		/// Update is called once per frame
 		void Update ()
 		{
-				if (gameStateMgr != null)
-						gameStateMgr.Update ();
+            if (gameStateMgr != null)
+                gameStateMgr.Update ();
 		}
 	
 		//--------------------------------------------------------------------------------
@@ -132,14 +131,13 @@ public class GameMgr : MonoBehaviour
 	
 		//--------------------------------------------------------------------------------
 		/// Calls the garbage collector
-		private IEnumerator GarbageCollectCR (float delay)
-		{
-				if (delay > 0.0f)
-						yield return new WaitForSeconds (delay);
+		private IEnumerator GarbageCollectCR (float delay) {
+            if (delay > 0.0f)
+                yield return new WaitForSeconds (delay);
 		
-				// do some cleanup after some time interval
-				System.GC.Collect ();
-				yield return Resources.UnloadUnusedAssets ();
+            // do some cleanup after some time interval
+            System.GC.Collect ();
+            yield return Resources.UnloadUnusedAssets ();
 		}
 	
 		//--------------------------------------------------------------------------------
