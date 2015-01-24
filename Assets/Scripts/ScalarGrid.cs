@@ -17,6 +17,7 @@ public class ScalarGrid : ExtBehaviour {
 
 	List<int> activeIndices;
 	float[] grid;
+	bool[] locked;
 	int width;
 	int height;
 	public bool showGridValues;
@@ -25,6 +26,7 @@ public class ScalarGrid : ExtBehaviour {
 		width = Mathf.CeilToInt(xSize / gridSize);
 		height = Mathf.CeilToInt(zSize / gridSize);
 		grid = new float[width * height];
+		locked = new bool[grid.Length];
 
 		activeIndices = new List<int>((int)(grid.Length * 0.4f));
 		Debug.Log("Grid Size: " + width + "x" + height + " = " + grid.Length);
@@ -56,6 +58,33 @@ public class ScalarGrid : ExtBehaviour {
 			}
 		}
 	}
+	
+	// ========================================== SETTERS? ========================================== //
+	public void SetupLockedIndices() {
+		Ray r;
+		RaycastHit hit;
+		Collider c = collider;
+		Vector3 v;
+
+		int mask = (1 << LayerMask.NameToLayer("Level")) | (1 << LayerMask.NameToLayer("Obstacles"));
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				v = Pos(x, y);
+				if (Physics.Raycast(v + Vector3.up * 10f, Vector3.down, out hit, Mathf.Infinity, mask)) {
+					if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Level")) {	
+					} else {
+						int ind = Index(x, y);
+						if (hit.collider.GetComponent<NeutralSurface>()) {
+							Set(ind, 0f);
+						} else {
+							Set(ind, 1f);
+						}
+						locked[Index(x, y)] = true;
+					}
+				}
+			}
+		}
+	}
 
 	// ========================================== SETTERS? ========================================== //
 	public void HeatPoint(Vector3 point, float radius, float intensity = 1f) {
@@ -80,6 +109,9 @@ public class ScalarGrid : ExtBehaviour {
 	}
 
 	public float Add(int i, float val) {
+		if (locked[i]) {
+			return -1f;
+		}
 		if (IOOB(i)) {
 			return -1f;
 		}
@@ -88,6 +120,10 @@ public class ScalarGrid : ExtBehaviour {
 	}
 
 	public float Sub(int i, float val) {
+		if (locked[i]) {
+			return -1f;
+		}
+
 		if (IOOB(i)) {
 			return -1f;
 		}
@@ -104,6 +140,9 @@ public class ScalarGrid : ExtBehaviour {
 	}
 
 	public float Set(int i, float val) {
+		if (locked[i]) {
+			return val;
+		}
 		return grid[i] = Mathf.Clamp01(val);
 	}
     
@@ -156,6 +195,10 @@ public class ScalarGrid : ExtBehaviour {
 		return i / width;
 	}
 
+	public int Index(int x, int z) {
+		return z * width + x;
+	}
+
 	public bool IOOB(int i) {
 		return i < 0 || i >= grid.Length;
 	}
@@ -181,55 +224,55 @@ public class ScalarGrid : ExtBehaviour {
 		return newFood.GetComponent<Food>();
 	}
 
-    public virtual GameObject SpawnObstacle(int i) {
-        //check for totalObstacleArea;
-        //return null if already greater than or equal to totalObstacleArea
-        GameObject newObs = null;
-        if (i == 0) {
-            newObs = (GameObject)Instantiate(GetResourceMgr().goNeutralSurface);
+	public virtual GameObject SpawnObstacle(int i) {
+		//check for totalObstacleArea;
+		//return null if already greater than or equal to totalObstacleArea
+		GameObject newObs = null;
+		if (i == 0) {
+			newObs = (GameObject)Instantiate(GetResourceMgr().goNeutralSurface);
 
-        } else if (i == 1) {
-            newObs = (GameObject)GameMgr.Instantiate(GetResourceMgr().goExtremeSurface);
-        }
+		} else if (i == 1) {
+			newObs = (GameObject)GameMgr.Instantiate(GetResourceMgr().goExtremeSurface);
+		}
 
-        if (newObs == null)
-            return null;
+		if (newObs == null)
+			return null;
 
-        //randomize scale
-        float scaleCoeffX = Random.Range(0.2f, 0.9f);
-        float scaleCoeffZ = Random.Range(0.2f, 0.9f);
-        float scaleCoeffArea = (scaleCoeffX * scaleCoeffZ);
+		//randomize scale
+		float scaleCoeffX = Random.Range(0.2f, 0.9f);
+		float scaleCoeffZ = Random.Range(0.2f, 0.9f);
+		float scaleCoeffArea = (scaleCoeffX * scaleCoeffZ);
 
-        GSGame gsGame = (GSGame)GetGameStateMgr().GetCurrentState();
-        if (gsGame == null)
-            return null;
+		GSGame gsGame = (GSGame)GetGameStateMgr().GetCurrentState();
+		if (gsGame == null)
+			return null;
 
-        if (gsGame.currentObstacleArea + scaleCoeffArea > GetResourceMgr().totalObstacleArea)
-            return null;
+		if (gsGame.currentObstacleArea + scaleCoeffArea > GetResourceMgr().totalObstacleArea)
+			return null;
 
-        gsGame.currentObstacleArea += scaleCoeffArea;
+		gsGame.currentObstacleArea += scaleCoeffArea;
 
-        newObs.transform.localScale = new Vector3(newObs.transform.localScale.x * scaleCoeffX, newObs.transform.localScale.y * scaleCoeffX, newObs.transform.localScale.z * scaleCoeffZ);
+		newObs.transform.localScale = new Vector3(newObs.transform.localScale.x * scaleCoeffX, newObs.transform.localScale.y * scaleCoeffX, newObs.transform.localScale.z * scaleCoeffZ);
 
-        //randomize rotation
-        float deg = Random.Range(0f, 179f);
-        Vector3 rot = newObs.transform.rotation.eulerAngles;
-        newObs.transform.rotation = Quaternion.Euler(rot.x, deg, rot.z);
+		//randomize rotation
+		float deg = Random.Range(0f, 179f);
+		Vector3 rot = newObs.transform.rotation.eulerAngles;
+		newObs.transform.rotation = Quaternion.Euler(rot.x, deg, rot.z);
 
-        //place new obstacle somewhere
-        newObs.transform.parent = gameObject.transform;
+		//place new obstacle somewhere
+		newObs.transform.parent = gameObject.transform;
         
-        Vector3 newPos = new Vector3(Random.Range(-4.8f, 4.8f), 0.35f, Random.Range(-3.4f, 3.4f));
-        newObs.transform.localPosition = newPos;
+		Vector3 newPos = new Vector3(Random.Range(-4.8f, 4.8f), 0.35f, Random.Range(-3.4f, 3.4f));
+		newObs.transform.localPosition = newPos;
 
-        return newObs;
-    }
+		return newObs;
+	}
 
-    private void SetSpecialTempVals() {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                Debug.DrawRay(Pos(x, y), Vector3.up * Get(x, y), Color.green);
-            }
-        }
-    }
+	private void SetSpecialTempVals() {
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				Debug.DrawRay(Pos(x, y), Vector3.up * Get(x, y), Color.green);
+			}
+		}
+	}
 }
