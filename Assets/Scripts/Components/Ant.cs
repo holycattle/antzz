@@ -15,6 +15,11 @@ public class Ant : ExtBehaviour {
 
         hasFood = true;
 
+        int layerIndex = LayerMask.NameToLayer("AntWithFood");
+        gameObject.layer = layerIndex;
+        foreach (Transform t in gameObject.transform)
+            t.gameObject.layer = layerIndex;
+
         f.SetIsOwned(true);        
         Vector3 oldPos = gameObject.transform.position;
         g.transform.position = new Vector3(oldPos.x, oldPos.y + 0.25f, oldPos.z);

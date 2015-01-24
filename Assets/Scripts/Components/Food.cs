@@ -10,5 +10,10 @@ public class Food : ExtBehaviour {
 
     public void SetIsOwned(bool s) {
         isOwned = s;
+
+        if (s) {
+            Collider c = gameObject.GetComponent<Collider>();
+            c.enabled = false;
+        }
     }
 }
