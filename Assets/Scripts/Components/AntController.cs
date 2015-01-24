@@ -1,19 +1,30 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class AntController : ExtBehaviour {
+
+	private static AntController[] antList;
 
 	public float moveSpeed = 1f; // units per second
 	public float rotateSpeed = 360f; // degrees per second
 	public float scanRadius = 1f;
 	public float scanArc = 180f;
 	public float backScanOffset = 0.5f;
+
+	public float followAngleThreshold = 10f;
+	public float antFollowRange = 4f;
+	public float antFollowArc = 90f;
+
 	ScalarGrid grid;
 	ZoneController capturedZoneController;
 
 	void Start() {
 		grid = GameMgr.Instance.grid;
 		capturedZoneController = null;
+
+		// Whenever a new AntController is created, update the list.
+		antList = GameObject.FindObjectsOfType<AntController>();
 	}
 	
 	void Update() {
@@ -24,9 +35,44 @@ public class AntController : ExtBehaviour {
 			transform.rotation = Quaternion.Euler(q);
 		} else {
 			float offsetAngle = Scan();
+			if (Mathf.Abs(offsetAngle) < followAngleThreshold) {
+				float newOffset = ScanAnts();
+				if (newOffset != 0) {
+					offsetAngle = newOffset;
+				}
+			}
+
 			transform.RotateAround(transform.position, Vector3.up, Mathf.Clamp(Mathf.Abs(offsetAngle), 0f, rotateSpeed * Time.deltaTime) * Mathf.Sign(offsetAngle));
 		}
 		transform.position += transform.forward * Time.deltaTime * moveSpeed;
+	}
+
+	float ScanAnts() {
+		int closestIndex = -1;
+		float closestDistance = Mathf.Infinity;
+		for (int i = 0; i < antList.Length; i++) {
+			if (antList[i] == null || antList[i] == this) {
+				continue;
+			}
+
+			float d = Vector3.Distance(transform.position, antList[i].transform.position);
+			if (d < closestDistance) {
+				if (d < antFollowRange) {
+					if (Vector3.Angle(transform.forward, antList[i].transform.position - transform.position) < antFollowArc) {
+						if (Vector3.Angle(transform.forward, antList[i].transform.forward) < 180f) {
+							closestIndex = i;
+							closestDistance = d;
+						}
+					}
+				}
+			}
+		}
+
+		if (closestIndex != -1) {
+			return SMath.SignedAngleBetween(transform.forward, antList[closestIndex].transform.position - transform.position, Vector3.up);
+		}
+
+		return 0f;
 	}
 
 	float Scan() {
@@ -96,7 +142,7 @@ public class AntController : ExtBehaviour {
 			}
 		}
 
-		Debug.DrawRay(transform.position, new Vector3(targetDir.x, 0f, targetDir.y).normalized * 5f, Color.blue);
+//		Debug.DrawRay(transform.position, new Vector3(targetDir.x, 0f, targetDir.y).normalized * 5f, Color.blue);
 //		Debug.Log("Scanulating:" + targetDir);
 //		return Vector2.Angle(forward, targetDir);
 //		Debug.Log(forward);

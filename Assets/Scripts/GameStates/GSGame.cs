@@ -17,12 +17,13 @@ public class GSGame : GameState {
 	private GameObject 			goPlayer = null;
 	private GameObject 			goCamera = null;
 
-    private Queue<Ant>          antList = new Queue<Ant>();
-    private Queue<Food>         foodList = new Queue<Food>();
+//    private Queue<Ant>          antList = new Queue<Ant>();
+//    private Queue<Food>         foodList = new Queue<Food>();
+	private List<Ant>			antList = new List<Ant>();
 
-    private Counter             gameTimer = new Counter();
-    private Counter             spawnDelay = new Counter();
-    private Counter             foodSpawnDelay = new Counter();
+	private Counter             gameTimer = new Counter();
+	private Counter             spawnDelay = new Counter();
+	private Counter             foodSpawnDelay = new Counter();
 
 	private FSM 				fsm = new FSM();
 	private List<ResetInfo> 	resetSet = new List<ResetInfo>();
@@ -34,9 +35,9 @@ public class GSGame : GameState {
 		InitFSM();
 		AddListeners();
 
-        gameTimer.SetLimit(GetResourceMgr().gameDuration);
-        spawnDelay.SetLimit(GetResourceMgr().antSpawnDelay);
-        foodSpawnDelay.SetLimit(GetResourceMgr().foodSpawnDelay);
+		gameTimer.SetLimit(GetResourceMgr().gameDuration);
+		spawnDelay.SetLimit(GetResourceMgr().antSpawnDelay);
+		foodSpawnDelay.SetLimit(GetResourceMgr().foodSpawnDelay);
 	}
 	
 	// Update is called once per frame
@@ -48,8 +49,8 @@ public class GSGame : GameState {
 
 	void InitFSM() {
 		fsm.AddState("Init", InitEnter, InitUpdate, InitExit, true);
-        fsm.AddState("Play", PlayEnter, PlayUpdate, PlayExit);
-        fsm.AddState("End",  EndEnter,  EndUpdate,  EndExit);
+		fsm.AddState("Play", PlayEnter, PlayUpdate, PlayExit);
+		fsm.AddState("End", EndEnter, EndUpdate, EndExit);
 	}
 
 	void AddListeners() {
@@ -69,82 +70,81 @@ public class GSGame : GameState {
 
 #region Init state
 	public void InitEnter() {
-        //RandomSpawn(10);
-        gameTimer.Reset();
-        spawnDelay.Reset();
-        foodSpawnDelay.Reset();
+		//RandomSpawn(10);
+		gameTimer.Reset();
+		spawnDelay.Reset();
+		foodSpawnDelay.Reset();
             
-        if (GetNotifyMgr() != null)
+		if (GetNotifyMgr() != null)
 			GetNotifyMgr().PostNotify(NotifyType.GameInitState, this);
 	}
 
 	public void InitUpdate() {
-        fsm.SetState("Play");
+		fsm.SetState("Play");
 	}
 
 	public void InitExit() {
 	}
 #endregion
 
-    public void PlayEnter() {
-    }
+	public void PlayEnter() {
+	}
 
-    public void PlayUpdate() {
-        gameTimer.Update(Time.deltaTime);
-        SpawnAnt();
-        SpawnFood();
+	public void PlayUpdate() {
+		gameTimer.Update(Time.deltaTime);
+		SpawnAnt();
+		SpawnFood();
 
-        if (gameTimer.IsReady()) {
-            GetNotifyMgr().PostNotify(NotifyType.GameTimerUp, this);
-            fsm.SetState("End");
-        }
-    }
+		if (gameTimer.IsReady()) {
+			GetNotifyMgr().PostNotify(NotifyType.GameTimerUp, this);
+			fsm.SetState("End");
+		}
+	}
 
-    public void PlayExit() {
+	public void PlayExit() {
 
-    }
+	}
 
-    public void EndEnter() {
-        Debug.Log("game ended!");
+	public void EndEnter() {
+		Debug.Log("game ended!");
 
-        Ant[] ants = GameMgr.Instance.gameObject.GetComponentsInChildren<Ant>();
-        foreach (Ant a in ants)
-            GameObject.Destroy(a.gameObject);
+		Ant[] ants = GameMgr.Instance.gameObject.GetComponentsInChildren<Ant>();
+		foreach (Ant a in ants)
+			GameObject.Destroy(a.gameObject);
 
-        Food[] foodArr = GameMgr.Instance.gameObject.GetComponentsInChildren<Food>();
-        foreach (Food f in foodArr)
-            GameObject.Destroy(f.gameObject);
-    }
+		Food[] foodArr = GameMgr.Instance.gameObject.GetComponentsInChildren<Food>();
+		foreach (Food f in foodArr)
+			GameObject.Destroy(f.gameObject);
+	}
 
-    public void EndUpdate() {
+	public void EndUpdate() {
 
-    }
+	}
 
-    public void EndExit() {
+	public void EndExit() {
 
-    }
+	}
 
-    private void SpawnAnt() {
-        ResourceMgr resourceMgr = GameMgr.Instance.GetResourceMgr();
-        Ant[] antArray = GameMgr.Instance.gameObject.GetComponentsInChildren<Ant>();
-        if (antArray.Length < resourceMgr.maxAnts && spawnDelay.IsReady()) {
-            GameMgr.Instance.grid.SpawnAnt();
-            spawnDelay.Reset();
-        } else {
-            spawnDelay.Update(Time.deltaTime);
-        }
-    }
+	private void SpawnAnt() {
+		ResourceMgr resourceMgr = GameMgr.Instance.GetResourceMgr();
+		Ant[] antArray = GameMgr.Instance.gameObject.GetComponentsInChildren<Ant>();
+		if (antArray.Length < resourceMgr.maxAnts && spawnDelay.IsReady()) {
+			GameMgr.Instance.grid.SpawnAnt();
+			spawnDelay.Reset();
+		} else {
+			spawnDelay.Update(Time.deltaTime);
+		}
+	}
 
-    private void SpawnFood() {
-        ResourceMgr resourceMgr = GameMgr.Instance.GetResourceMgr();
-        Food[] foodArr = GameMgr.Instance.gameObject.GetComponentsInChildren<Food>();
+	private void SpawnFood() {
+		ResourceMgr resourceMgr = GameMgr.Instance.GetResourceMgr();
+		Food[] foodArr = GameMgr.Instance.gameObject.GetComponentsInChildren<Food>();
 
-        if (foodArr.Length < resourceMgr.maxFood && foodSpawnDelay.IsReady())
-        {
-            GameMgr.Instance.grid.SpawnFood();
-            foodSpawnDelay.Reset();
-        } else {
-            foodSpawnDelay.Update(Time.deltaTime);
-        }
-    }
+		if (foodArr.Length < resourceMgr.maxFood && foodSpawnDelay.IsReady()) {
+			GameMgr.Instance.grid.SpawnFood();
+			foodSpawnDelay.Reset();
+		} else {
+			foodSpawnDelay.Update(Time.deltaTime);
+		}
+	}
 }
