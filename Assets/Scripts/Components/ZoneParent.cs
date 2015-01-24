@@ -2,10 +2,14 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class ZoneParent : MonoBehaviour {
+public class ZoneParent : ExtBehaviour {
 
 	public int score = 0;
 	public Text scoreText;
+
+    void Start() {
+        GetNotifyMgr().AddListener(NotifyType.NewGame, OnNewGame);
+    }
 
 	public void IncreaseScore() {
 		score++;
@@ -23,5 +27,10 @@ public class ZoneParent : MonoBehaviour {
 	void UpdateScoreText() {
 		scoreText.text = "" + score + " points";
 	}
+
+    public void OnNewGame(Notify n) {
+        score = 0;
+        UpdateScoreText();
+    }
 
 }

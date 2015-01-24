@@ -37,7 +37,7 @@ public class GSGame : GameState {
 		spawnDelay.SetLimit(GetResourceMgr().antSpawnDelay);
 		foodSpawnDelay.SetLimit(GetResourceMgr().foodSpawnDelay);
 	}
-	
+
 	// Update is called once per frame
 	public override void Update() {
 		base.Update();
@@ -53,7 +53,7 @@ public class GSGame : GameState {
 	}
 
 	void AddListeners() {
-
+        GetNotifyMgr().AddListener(NotifyType.NewGame, OnNewGame);
 	}
 
 	void AddToReset(GameObject g) {
@@ -93,7 +93,7 @@ public class GSGame : GameState {
 #endregion
 
     public void WaitEnter() {
-        //GetNotifyMgr().PostNotify();
+        GetNotifyMgr().PostNotify(NotifyType.GameTimerUp, this);
     }
 
     public void WaitUpdate() {
@@ -178,4 +178,9 @@ public class GSGame : GameState {
 
 	private void PopulateHotIndices() {
 	}
+
+    public void OnNewGame(Notify n) {
+        Debug.Log("new game!");
+        fsm.SetState("Init");
+    }
 }
