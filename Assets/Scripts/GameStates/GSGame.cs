@@ -18,8 +18,10 @@ public class GSGame : GameState {
 	private GameObject 			goCamera = null;
 
     private Queue<Ant>          antList = new Queue<Ant>();
+    private Queue<Food>         foodList = new Queue<Food>();
 
     private Counter             spawnDelay = new Counter();
+    private Counter             foodSpawnDelay = new Counter();
 
 	private FSM 				fsm = new FSM();
 	private List<ResetInfo> 	resetSet = new List<ResetInfo>();
@@ -31,7 +33,8 @@ public class GSGame : GameState {
 		InitFSM();
 		AddListeners();
 
-        spawnDelay.SetLimit(GameMgr.Instance.grid.spawnDelay);
+        spawnDelay.SetLimit(GameMgr.Instance.GetResourceMgr().antSpawnDelay);
+        foodSpawnDelay.SetLimit(GameMgr.Instance.GetResourceMgr().foodSpawnDelay);
 	}
 	
 	// Update is called once per frame
@@ -81,6 +84,15 @@ public class GSGame : GameState {
     }
 
     public void PlayUpdate() {
+        SpawnAnt();
+        SpawnFood();
+    }
+
+    public void PlayExit() {
+
+    }
+
+    private void SpawnAnt() {
         ResourceMgr resourceMgr = GameMgr.Instance.GetResourceMgr();
 
         if (antList.Count < resourceMgr.maxAnts && spawnDelay.IsReady())
@@ -92,10 +104,21 @@ public class GSGame : GameState {
             spawnDelay.Reset();
         }
 
-        spawnDelay.Update(Time.deltaTime);        
+        spawnDelay.Update(Time.deltaTime);
     }
 
-    public void PlayExit() {
+    private void SpawnFood() {
+        ResourceMgr resourceMgr = GameMgr.Instance.GetResourceMgr();
 
+        if (foodList.Count < resourceMgr.maxFood && foodSpawnDelay.IsReady())
+        {
+            Food newFood = GameMgr.Instance.grid.SpawnFood();
+            if (newFood != null)
+                foodList.Enqueue(newFood);
+
+            foodSpawnDelay.Reset();
+        }
+
+        foodSpawnDelay.Update(Time.deltaTime);
     }
 }
