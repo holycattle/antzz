@@ -123,6 +123,14 @@ public class GSGame : GameState {
 		Food[] foodArr = GameMgr.Instance.gameObject.GetComponentsInChildren<Food>();
 		foreach (Food f in foodArr)
 			GameObject.Destroy(f.gameObject);
+
+        NeutralSurface[] ns = GameMgr.Instance.gameObject.GetComponentsInChildren<NeutralSurface>();
+        foreach (NeutralSurface n in ns)
+            GameObject.Destroy(n.gameObject);
+
+        ObstacleSurface[] os = GameMgr.Instance.gameObject.GetComponentsInChildren<ObstacleSurface>();
+        foreach (ObstacleSurface o in os)
+            GameObject.Destroy(o.gameObject);
 	}
 
 	public void EndUpdate() {
