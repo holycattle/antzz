@@ -63,7 +63,7 @@ public class GameMgr : MonoBehaviour {
 	// Game Script references
 	public ScalarGrid grid { get; internal set; }
 	public InputHandler inputter { get; internal set; }
-	public HeatParticles particles { get; internal set; }
+	public ParticleHandler particles { get; internal set; }
 
 	//--------------------------------------------------------------------------------
 	void Awake() {
@@ -83,7 +83,7 @@ public class GameMgr : MonoBehaviour {
 		// Get References of all important objects
 		this.grid = GetComponentInChildren<ScalarGrid>();
 		this.inputter = GetComponentInChildren<InputHandler>();
-		this.particles = GetComponentInChildren<HeatParticles>();
+		this.particles = GetComponentInChildren<ParticleHandler>();
 
 		#if !(UNITY_EDITOR)
 		Util.LogWarning("System Memory " + SystemInfo.systemMemorySize);
