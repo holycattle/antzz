@@ -105,16 +105,41 @@ public class ScalarGrid : ExtBehaviour {
 		return Mathf.RoundToInt((SMath.FloorMultiple(z, gridSize) / gridSize) * width + (SMath.FloorMultiple(x, gridSize) / gridSize));
 	}
 
+	public Vector3[] SquaresInBox(Vector3 point, float halfSize) {
+		List<Vector3> vectors = new List<Vector3>();
+		int topLeftIndex = ClosestIndex(point.x - halfSize, point.z - halfSize);
+		int botRightIndex = ClosestIndex(point.x + halfSize, point.z + halfSize);
+		
+		int x1 = IndexX(topLeftIndex);
+		int z1 = IndexZ(topLeftIndex);
+		int x2 = IndexX(botRightIndex);
+		int z2 = IndexZ(botRightIndex);
+		
+		for (int x = x1; x <= x2; x++) {
+			for (int z = z1; z <= z2; z++) {
+				vectors.Add(Pos(x, z));
+			}
+		}
+		return vectors.ToArray();
+	}
+
 	public float Get(int x, int z) {
-		return grid[z * width + x];
+		return Get(z * width + x);
+	}
+
+	public float Get(int i) {
+		if (IOOB(i)) {
+			return 0f;
+		}
+		return grid[i];
 	}
 
 	public Vector3 Pos(int x, int z) {
-		return new Vector3(x * gridSize, 0f, z * gridSize);
+		return new Vector3(x * gridSize, Get(x, z), z * gridSize);
 	}
 
 	public Vector3 Pos(int i) {
-		return new Vector3((i % width) * gridSize, 0f, (i / width) * gridSize);
+		return new Vector3((i % width) * gridSize, Get(i), (i / width) * gridSize);
 	}
 
 	public int IndexX(int i) {
@@ -123,6 +148,10 @@ public class ScalarGrid : ExtBehaviour {
 
 	public int IndexZ(int i) {
 		return i / width;
+	}
+
+	public bool IOOB(int i) {
+		return i < 0 || i > grid.Length;
 	}
 
 	public virtual Ant SpawnAnt() {
