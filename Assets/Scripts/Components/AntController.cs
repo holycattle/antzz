@@ -9,17 +9,23 @@ public class AntController : ExtBehaviour {
 	public float scanArc = 180f;
 
 	ScalarGrid grid;
+	ZoneController capturedZoneController;
 
 	void Start() {
 		grid = GameMgr.Instance.grid;
+		capturedZoneController = null;
 	}
 	
 	void Update() {
-		float offsetAngle = Scan();
-		Debug.Log(offsetAngle);
-		transform.RotateAround(transform.position, Vector3.up, Mathf.Clamp(Mathf.Abs(offsetAngle), 0f, rotateSpeed * Time.deltaTime) * Mathf.Sign(offsetAngle));
-
-		// Move Forward
+		if (capturedZoneController != null) {
+			Vector3 q = Quaternion.LookRotation(capturedZoneController.transform.position - transform.position).eulerAngles;
+			q.x = 0f;
+			q.z = 0f;
+			transform.rotation = Quaternion.Euler(q);
+		} else {
+			float offsetAngle = Scan();
+			transform.RotateAround(transform.position, Vector3.up, Mathf.Clamp(Mathf.Abs(offsetAngle), 0f, rotateSpeed * Time.deltaTime) * Mathf.Sign(offsetAngle));
+		}
 		transform.position += transform.forward * Time.deltaTime * moveSpeed;
 	}
 
@@ -48,6 +54,10 @@ public class AntController : ExtBehaviour {
 //		Debug.Log(forward);
 //		Debug.Log(targetDir);
 		return SMath.SignedAngleBetween(forward, targetDir.normalized, Vector3.back);
+	}
+
+	public void OnEnterAnthillRadius(ZoneController zone) { // Don't change the name of this function, it's called via a SendMessage()
+		capturedZoneController = zone;
 	}
 
 }
