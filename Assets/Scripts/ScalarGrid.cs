@@ -74,7 +74,7 @@ public class ScalarGrid : ExtBehaviour {
 					if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Level")) {	
 					} else {
 						int ind = Index(x, y);
-						if (hit.collider.GetComponent<NeutralSurface>()) {
+						if (hit.collider.GetComponentInParent<NeutralSurface>() != null) {
 							Set(ind, 0f);
 						} else {
 							Set(ind, 1f);
