@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InputHandler : MonoBehaviour {
+public class InputHandler : ExtBehaviour {
 
 	public float heatRadius = 0.5f;
 

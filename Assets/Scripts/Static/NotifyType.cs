@@ -13,5 +13,7 @@ public enum NotifyType {
 	LoadUpdateProgress		= 30,
 	LoadFinished			= 35,
 
-    LoadGameSceneDone       = 40,
+	LoadGameSceneDone       = 40,
+
+	TouchHappened			= 50
 }

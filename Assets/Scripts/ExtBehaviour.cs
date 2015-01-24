@@ -3,20 +3,24 @@ using System.Collections;
 	
 public class ExtBehaviour : MonoBehaviour {
 	public NotifyMgr GetNotifyMgr() {
-		if (GameMgr.Instance == null) return null;
+		if (GameMgr.Instance == null)
+			return null;
 		return GameMgr.Instance.GetNotifyMgr();
 	}
 	
+//	public 
+
 	/*public UIMgr GetUIMgr() {
 		if (GameMgr.Instance == null) return null;
 		return GameMgr.Instance.GetUIMgr();
 	}*/
 	
 	public GameStateMgr GetGameStateMgr() {
-		if (GameMgr.Instance == null) return null;
+		if (GameMgr.Instance == null)
+			return null;
 		return GameMgr.Instance.GetGameStateMgr();
 	}
-	
+
 	/*public UserDataMgr GetUserDataMgr() {
 		if (GameMgr.Instance == null) return null;
 		return GameMgr.GetUDM();

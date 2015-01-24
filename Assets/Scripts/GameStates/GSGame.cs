@@ -4,8 +4,7 @@ using System.Collections.Generic;
 
 public struct ResetInfo {
 
-	public ResetInfo(Transform _t, Vector3 _position)
-	{
+	public ResetInfo (Transform _t, Vector3 _position) {
 		t = _t;
 		position = _position;
 	}
@@ -16,14 +15,15 @@ public struct ResetInfo {
 
 public class GSGame : GameState {
 
-	private GameObject 			goPlayer		= null;
-	private GameObject 			goCamera 		= null;
-	private FSM 				fsm 			= new FSM();
-	private List<ResetInfo> 	resetSet 		= new List<ResetInfo>();
+	private GameObject 			goPlayer = null;
+	private GameObject 			goCamera = null;
+	private FSM 				fsm = new FSM();
+	private List<ResetInfo> 	resetSet = new List<ResetInfo>();
 
-	public GSGame() : base() {}
+	public GSGame () : base() {
+	}
 
-	public override void Enter () {
+	public override void Enter() {
 		InitFSM();
 		AddListeners();
 	}
@@ -36,7 +36,7 @@ public class GSGame : GameState {
 	}
 
 	void InitFSM() {
-		fsm.AddState("Init", 		InitEnter, 		InitUpdate, 	InitExit, 	true);
+		fsm.AddState("Init", InitEnter, InitUpdate, InitExit, true);
 	}
 
 	void AddListeners() {
@@ -55,18 +55,13 @@ public class GSGame : GameState {
 	}
 
 #region Init state
-	public void InitEnter()
-	{	
+	public void InitEnter() {	
 	}
-	public void InitUpdate()
-	{
-		ResetState();
-		
+	public void InitUpdate() {
 		if (GetNotifyMgr() != null)
 			GetNotifyMgr().PostNotify(NotifyType.GameInitState, this);
 	}
-	public void InitExit()
-	{
+	public void InitExit() {
 	}
 #endregion
 }

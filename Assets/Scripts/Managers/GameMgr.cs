@@ -27,7 +27,7 @@ public class GameMgr : MonoBehaviour {
 	public GameStateMgr GetGameStateMgr() {
 		return gameStateMgr;
 	}
-	
+
 	//--------------------------------------------------------------------------------
 	/*private UIMgr uiMgr = new RRSV.UIMgr();
 	public UIMgr GetUIMgr() {
@@ -55,23 +55,23 @@ public class GameMgr : MonoBehaviour {
 	}*/
 	
 	//--------------------------------------------------------------------------------
-	private GameObject 		goDataMgr 		= null;
+	private GameObject 		goDataMgr = null;
 	
-	private bool			isLoading 		= true;
+	private bool			isLoading = true;
 	
 	//--------------------------------------------------------------------------------
 	void Awake() {
 		instance = this;
 
 		// Create the major game states
-		gameStateMgr.Add("game", 	new GSGame(), true);
+		gameStateMgr.Add("game", new GSGame(), true);
 
-        GetNotifyMgr().AddListener(NotifyType.LoadGameSceneDone, OnLoadGameSceneDone);
+		GetNotifyMgr().AddListener(NotifyType.LoadGameSceneDone, OnLoadGameSceneDone);
 	}
 	
 	//--------------------------------------------------------------------------------
 	/// Use this for initialization
-	void Start ()  {
+	void Start() {
 		Application.targetFrameRate = 60;
 		
 		#if !(UNITY_EDITOR)
@@ -93,12 +93,14 @@ public class GameMgr : MonoBehaviour {
 	
 	//--------------------------------------------------------------------------------
 	/// Update is called once per frame
-	void Update () {
-		if (gameStateMgr != null) 	gameStateMgr.Update();
+	void Update() {
+		if (gameStateMgr != null)
+			gameStateMgr.Update();
 	}
 	
 	//--------------------------------------------------------------------------------
-	void OnGUI() {}
+	void OnGUI() {
+	}
 	
 	public void GarbageCollect(float delay = 0.0f) {
 		StartCoroutine(GarbageCollectCR(delay));
@@ -123,29 +125,28 @@ public class GameMgr : MonoBehaviour {
 		/*if (audioMgr != null)
 			audioMgr.Init();*/
 
-        Debug.Log("load finished");
+		Debug.Log("load finished");
 
-        GetNotifyMgr().RemoveListener(NotifyType.LoadGameSceneDone, OnLoadGameSceneDone);
+		GetNotifyMgr().RemoveListener(NotifyType.LoadGameSceneDone, OnLoadGameSceneDone);
 	}
 
 	public void OnApplicationFocus(bool focus) {
-		Debug.Log("OnApplicationFocus("+ focus + ")");
+		Debug.Log("OnApplicationFocus(" + focus + ")");
 	}
 	
 	public void OnApplicationPause(bool pauseStatus) {
-		Debug.Log("OnApplicationPause("+ pauseStatus + ")");
+		Debug.Log("OnApplicationPause(" + pauseStatus + ")");
 		
 		if (isLoading) 
 			return;
 		
 		if (pauseStatus == true) {	
 			//DoLocalNotification();
-		}
-		else {
+		} else {
 			CancelLocalNotification();
 		}
 		
-		if(GetNotifyMgr() != null)
+		if (GetNotifyMgr() != null)
 			GetNotifyMgr().PostNotify(NotifyType.GameDisabled, this);
 	}
 	
@@ -153,11 +154,13 @@ public class GameMgr : MonoBehaviour {
 		if (isLoading)
 			return;
 		
-		if(GetNotifyMgr() != null)
+		if (GetNotifyMgr() != null)
 			GetNotifyMgr().PostNotify(NotifyType.GameDisabled, this);
 	}
 	
-	private void CancelLocalNotification() {}
+	private void CancelLocalNotification() {
+	}
 	
-	private void DoLocalNotification() {}
+	private void DoLocalNotification() {
+	}
 }

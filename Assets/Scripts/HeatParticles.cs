@@ -1,15 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HeatParticles : MonoBehaviour {
+[RequireComponent(typeof(ParticleSystem))]
+public class HeatParticles : ExtBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
+	ParticleSystem particles;
+	InputHandler input;
+	ScalarGrid grid;
+
+	void Awake() {
+		particles = GetComponent<ParticleSystem>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	public void Particlify(Vector3 pos) {
+		byte b = 1;
+		particles.Emit(pos, Vector3.zero, input.heatRadius, grid.decayRate, new Color32(b, b, b, 1));
 	}
+
 }
