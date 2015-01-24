@@ -52,7 +52,8 @@ public class GSGame : GameState {
 	}
 
 	void InitFSM() {
-		fsm.AddState("Init", InitEnter, InitUpdate, InitExit, true);
+        fsm.AddState("Wait", WaitEnter, WaitUpdate, WaitExit, true);
+		fsm.AddState("Init", InitEnter, InitUpdate, InitExit);
 		fsm.AddState("Play", PlayEnter, PlayUpdate, PlayExit);
 		fsm.AddState("End", EndEnter, EndUpdate, EndExit);
 	}
@@ -98,6 +99,18 @@ public class GSGame : GameState {
 	public void InitExit() {
 	}
 #endregion
+
+    public void WaitEnter() {
+        //GetNotifyMgr().PostNotify();
+    }
+
+    public void WaitUpdate() {
+
+    }
+
+    public void WaitExit() {
+
+    }
 
 	public void PlayEnter() {
 	}
