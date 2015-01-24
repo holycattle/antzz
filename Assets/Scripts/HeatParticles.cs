@@ -4,17 +4,25 @@ using System.Collections;
 [RequireComponent(typeof(ParticleSystem))]
 public class HeatParticles : ExtBehaviour {
 
+	public float particleSizeMultiplier = 3f; // Use this to make the blotch bigger or smaller
+
 	ParticleSystem particles;
 	InputHandler input;
 	ScalarGrid grid;
 
-	void Awake() {
+	void Start() {
 		particles = GetComponent<ParticleSystem>();
+		input = GameMgr.Instance.inputter;
+		grid = GameMgr.Instance.grid;
+
+		// Initialize Particle System variables based on Input and Grid
+		particles.startLifetime = 1f / grid.decayRate;
+		particles.startSize = input.heatRadius * 2f * particleSizeMultiplier;
 	}
 
 	public void Particlify(Vector3 pos) {
-		byte b = 1;
-		particles.Emit(pos, Vector3.zero, input.heatRadius, grid.decayRate, new Color32(b, b, b, 1));
+		transform.position = pos;
+		particles.Emit(1);
 	}
 
 }

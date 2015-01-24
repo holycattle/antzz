@@ -8,7 +8,7 @@ public class ScalarGrid : ExtBehaviour {
 	public float zSize;
 	public float gridSize;
 
-    private GameObject[] spawnPoints = new GameObject[2];
+    public GameObject[] spawnPoints = new GameObject[2];
 
 	public float decayRate = 4f; // value per second (default = depletes completely in 1/4th second)
 
@@ -73,11 +73,22 @@ public class ScalarGrid : ExtBehaviour {
 
 	// ========================================== HELPERS ========================================== //
 	public float Add(int x, int z, float val) {
-		activeIndices.Add(z * width + x);
-		return grid[z * width + x] = Mathf.Clamp01(grid[z * width + x] + val);
+		return Add(z * width + x, val);
+	}
+
+	public float Add(int i, float val) {
+		if (i < 0 || i > grid.Length) {
+			return -1f;
+		}
+		activeIndices.Add(i);
+		return grid[i] = Mathf.Clamp01(grid[i] + val);
 	}
 
 	public float Sub(int i, float val) {
+		if (i < 0 || i > grid.Length) {
+			return -1f;
+		}
+
 		grid[i] = Mathf.Clamp01(grid[i] - val);
 		if (grid[i] == 0) {
 			activeIndices.Remove(i);
