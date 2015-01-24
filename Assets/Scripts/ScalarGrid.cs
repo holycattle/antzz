@@ -224,45 +224,49 @@ public class ScalarGrid : ExtBehaviour {
 		return newFood.GetComponent<Food>();
 	}
 
-	public virtual GameObject SpawnObstacle(int i) {
-		//check for totalObstacleArea;
-		//return null if already greater than or equal to totalObstacleArea
-		GameObject newObs = null;
-		if (i == 0) {
-			newObs = (GameObject)Instantiate(GetResourceMgr().goNeutralSurface);
+	public virtual void SpawnObstacles() {
+		int[] types = { 0, 0, 1, 1 };
+		Util.ShuffleArray<int>(types);
 
-		} else if (i == 1) {
-			newObs = (GameObject)GameMgr.Instantiate(GetResourceMgr().goExtremeSurface);
+		for (int i = 0; i < 4; i++) {
+			SpawnObstacle(types[i], i);
+		}
+	}
+
+	GameObject SpawnObstacle(int type, int quadrant) {
+		GameObject newObs = null;
+		if (type == 0) {
+			newObs = (GameObject)Instantiate(GetResourceMgr().goNeutralSurface);
+		} else if (type == 1) {
+			newObs = (GameObject)Instantiate(GetResourceMgr().goExtremeSurface);
 		}
 
-		if (newObs == null)
-			return null;
-
-		//randomize scale
-		float scaleCoeffX = Random.Range(0.2f, 0.9f);
-		float scaleCoeffZ = Random.Range(0.2f, 0.9f);
+		// Randomize scale to have random Area [1.8, 2.2]
+		float targetArea = (type == 0) ? Random.Range(2.4f, 3f) : Random.Range(1.4f, 1.8f);
+		float scaleCoeffX = Random.Range(1f, 3f);
+		float scaleCoeffZ = targetArea / scaleCoeffX;
 		float scaleCoeffArea = (scaleCoeffX * scaleCoeffZ);
 
-		GSGame gsGame = (GSGame)GetGameStateMgr().GetCurrentState();
-		if (gsGame == null)
-			return null;
-
-		if (gsGame.currentObstacleArea + scaleCoeffArea > GetResourceMgr().totalObstacleArea)
-			return null;
-
-		gsGame.currentObstacleArea += scaleCoeffArea;
-
+//		GSGame gsGame = (GSGame)GetGameStateMgr().GetCurrentState();
+//		if (gsGame == null) {
+//			return null;
+//		}
+//
+//		gsGame.currentObstacleArea += scaleCoeffArea;
 		newObs.transform.localScale = new Vector3(newObs.transform.localScale.x * scaleCoeffX, newObs.transform.localScale.y * scaleCoeffX, newObs.transform.localScale.z * scaleCoeffZ);
 
-		//randomize rotation
+		// randomize rotation
 		float deg = Random.Range(0f, 179f);
-		Vector3 rot = newObs.transform.rotation.eulerAngles;
-		newObs.transform.rotation = Quaternion.Euler(rot.x, deg, rot.z);
+//		Vector3 rot = newObs.transform.rotation.eulerAngles;
+		newObs.transform.rotation = Quaternion.Euler(0, deg, 0);
 
-		//place new obstacle somewhere
+		// place new obstacle somewhere
 		newObs.transform.parent = gameObject.transform;
-        
-		Vector3 newPos = new Vector3(Random.Range(-4.8f, 4.8f), 0.35f, Random.Range(-3.4f, 3.4f));
+		
+		//		Vector3 newPos = new Vector3(Random.Range(-4.8f, 4.8f), 0.35f, Random.Range(-3.4f, 3.4f));
+		float xPos = (quadrant % 2 == 0) ? Random.Range(-4.4f, 0f) : Random.Range(0f, 4.4f);
+		float zPos = (quadrant / 2 == 0) ? Random.Range(-3.2f, 0f) : Random.Range(0f, 3.2f);
+		Vector3 newPos = new Vector3(xPos, 0.35f, zPos);
 		newObs.transform.localPosition = newPos;
 
 		return newObs;
