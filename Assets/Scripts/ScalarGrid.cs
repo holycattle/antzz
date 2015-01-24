@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ScalarGrid : ExtBehaviour {
-    const float foodYPos = 3f;
+    const float foodYPos = 0.15f;
+    const float minFoodZPos = -4f;
+    const float maxFoodZPos = 4f;
 
 	public float xSize;
 	public float zSize;
@@ -175,7 +177,7 @@ public class ScalarGrid : ExtBehaviour {
     public virtual Food SpawnFood() {
         GameObject newFood = (GameObject)Instantiate(GetResourceMgr().goFood);
         newFood.transform.parent = gameObject.transform;
-        Vector3 rndPos = new Vector3(Random.Range(-7f, 7f), foodYPos, Random.Range(-5.8f, 2.65f));
+        Vector3 rndPos = new Vector3(Random.Range(-7f, 7f), foodYPos, Random.Range(minFoodZPos, maxFoodZPos));
         newFood.transform.localPosition = rndPos;
 
         return newFood.GetComponent<Food>();
