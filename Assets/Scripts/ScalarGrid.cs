@@ -37,8 +37,6 @@ public class ScalarGrid : ExtBehaviour {
 //		Debug.DrawRay(Pos(2289), Vector3.up, Color.blue, 10f);
 //		HeatPoint(new Vector3(12.34f, 0f, 8.9f), 0.5f);
 //
-		spawnPoints[0] = Util.Find(gameObject, "SpawnPoint0");
-		spawnPoints[1] = Util.Find(gameObject, "SpawnPoint1");
 
 		spawnDelay = GetResourceMgr().antSpawnDelay;
 		foodSpawnDelay = GetResourceMgr().foodSpawnDelay;
@@ -182,4 +180,53 @@ public class ScalarGrid : ExtBehaviour {
 
 		return newFood.GetComponent<Food>();
 	}
+
+    public virtual GameObject SpawnObstacle(int i) {
+        //check for totalObstacleArea;
+        //return null if already greater than or equal to totalObstacleArea
+        GameObject newObs = null;
+        if (i == 0) {
+            newObs = (GameObject)Instantiate(GetResourceMgr().goNeutralSurface);
+
+        } else if (i == 1) {
+            newObs = (GameObject)GameMgr.Instantiate(GetResourceMgr().goExtremeSurface);
+        }
+
+        if (newObs == null)
+            return null;
+
+        //randomize scale
+        float scaleCoeff = Random.Range(0.2f, 0.9f);
+        GSGame gsGame = (GSGame)GetGameStateMgr().GetCurrentState();
+        if (gsGame == null)
+            return null;
+
+        if (gsGame.currentObstacleArea + scaleCoeff > GetResourceMgr().totalObstacleArea)
+            return null;
+
+        gsGame.currentObstacleArea += scaleCoeff;
+
+        newObs.transform.localScale = new Vector3(newObs.transform.localScale.x * scaleCoeff, newObs.transform.localScale.y * scaleCoeff, newObs.transform.localScale.z * scaleCoeff);
+
+        //randomize rotation
+        float deg = Random.Range(0f, 179f);
+        Vector3 rot = newObs.transform.rotation.eulerAngles;
+        newObs.transform.rotation = Quaternion.Euler(rot.x, deg, rot.z);
+
+        //place new obstacle somewhere
+        newObs.transform.parent = gameObject.transform;
+        
+        Vector3 newPos = new Vector3(Random.Range(-4.8f, 4.8f), 0.35f, Random.Range(-3.4f, 3.4f));
+        newObs.transform.localPosition = newPos;
+
+        return newObs;
+    }
+
+    private void SetSpecialTempVals() {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                Debug.DrawRay(Pos(x, y), Vector3.up * Get(x, y), Color.green);
+            }
+        }
+    }
 }
