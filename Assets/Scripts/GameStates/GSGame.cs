@@ -126,31 +126,25 @@ public class GSGame : GameState {
 
     private void SpawnAnt() {
         ResourceMgr resourceMgr = GameMgr.Instance.GetResourceMgr();
-
-        if (antList.Count < resourceMgr.maxAnts && spawnDelay.IsReady())
-        {
-            Ant newAnt = GameMgr.Instance.grid.SpawnAnt();
-            if (newAnt != null)
-                antList.Enqueue(newAnt);
-
+        Ant[] antArray = GameMgr.Instance.gameObject.GetComponentsInChildren<Ant>();
+        if (antArray.Length < resourceMgr.maxAnts && spawnDelay.IsReady()) {
+            GameMgr.Instance.grid.SpawnAnt();
             spawnDelay.Reset();
+        } else {
+            spawnDelay.Update(Time.deltaTime);
         }
-
-        spawnDelay.Update(Time.deltaTime);
     }
 
     private void SpawnFood() {
         ResourceMgr resourceMgr = GameMgr.Instance.GetResourceMgr();
+        Food[] foodArr = GameMgr.Instance.gameObject.GetComponentsInChildren<Food>();
 
-        if (foodList.Count < resourceMgr.maxFood && foodSpawnDelay.IsReady())
+        if (foodArr.Length < resourceMgr.maxFood && foodSpawnDelay.IsReady())
         {
-            Food newFood = GameMgr.Instance.grid.SpawnFood();
-            if (newFood != null)
-                foodList.Enqueue(newFood);
-
+            GameMgr.Instance.grid.SpawnFood();
             foodSpawnDelay.Reset();
+        } else {
+            foodSpawnDelay.Update(Time.deltaTime);
         }
-
-        foodSpawnDelay.Update(Time.deltaTime);
     }
 }
