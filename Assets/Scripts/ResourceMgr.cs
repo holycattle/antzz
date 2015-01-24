@@ -3,6 +3,7 @@ using System.Collections;
 
 public class ResourceMgr : ExtBehaviour {
     public GameObject goAnt;
+    public GameObject goSoldierAnt;
     public GameObject goFood;
     
     public GameObject goNeutralSurface;
@@ -11,6 +12,7 @@ public class ResourceMgr : ExtBehaviour {
     public float gameDuration;
 
     public int maxAnts;
+    public float soldierAntRatio;
     public int antGroupCount;
 
     public int maxFood;

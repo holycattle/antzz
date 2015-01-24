@@ -1,12 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ZoneKiller : MonoBehaviour {
+public class ZoneKiller : ExtBehaviour {
 	
 	void OnTriggerEnter(Collider c) {
-		if (c.gameObject.GetComponent<Ant>() != null) {
-			Ant a = c.gameObject.GetComponent<Ant>();
+        SoldierAnt s = c.gameObject.GetComponent<SoldierAnt>();
+        if (s != null) {
+            GetComponentInParent<ZoneParent>().DecreaseScore(s.penalty);
+            s.KillAnt();
+            return;
+        }
 
+        Ant a = c.gameObject.GetComponent<Ant>();
+		if (a != null) {
 			if (a.hasFood) {
 				GetComponentInParent<ZoneParent>().IncreaseScore();
 			}
