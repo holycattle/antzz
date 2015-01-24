@@ -8,7 +8,11 @@ public class ExtBehaviour : MonoBehaviour {
 		return GameMgr.Instance.GetNotifyMgr();
 	}
 	
-//	public 
+    public ResourceMgr GetResourceMgr() {
+        if (GameMgr.Instance == null)
+            return null;
+        return GameMgr.Instance.GetResourceMgr();
+    }
 
 	/*public UIMgr GetUIMgr() {
 		if (GameMgr.Instance == null) return null;

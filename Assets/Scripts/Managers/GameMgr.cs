@@ -21,7 +21,14 @@ public class GameMgr : MonoBehaviour {
 	public NotifyMgr GetNotifyMgr() {
 		return notifyMgr;
 	}
-	
+
+    private ResourceMgr resourceMgr;
+    public ResourceMgr GetResourceMgr() {
+        if (resourceMgr == null)
+            resourceMgr = gameObject.GetComponent<ResourceMgr>();
+        return resourceMgr;
+    }
+
 	//--------------------------------------------------------------------------------
 	private GameStateMgr gameStateMgr = new GameStateMgr();
 	public GameStateMgr GetGameStateMgr() {

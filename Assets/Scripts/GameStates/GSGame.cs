@@ -14,9 +14,9 @@ public struct ResetInfo {
 };
 
 public class GSGame : GameState {
-
 	private GameObject 			goPlayer = null;
 	private GameObject 			goCamera = null;
+    private GameObject[]        spawnPoints = new GameObject[2];
 	private FSM 				fsm = new FSM();
 	private List<ResetInfo> 	resetSet = new List<ResetInfo>();
 
@@ -26,6 +26,9 @@ public class GSGame : GameState {
 	public override void Enter() {
 		InitFSM();
 		AddListeners();
+
+        spawnPoints[0] = Util.Find(GameMgr.Instance.gameObject, "SpawnPoint0");
+        spawnPoints[1] = Util.Find(GameMgr.Instance.gameObject, "SpawnPoint1");
 	}
 	
 	// Update is called once per frame
@@ -55,13 +58,26 @@ public class GSGame : GameState {
 	}
 
 #region Init state
-	public void InitEnter() {	
-	}
-	public void InitUpdate() {
-		if (GetNotifyMgr() != null)
+	public void InitEnter() {
+        RandomSpawn();
+
+        if (GetNotifyMgr() != null)
 			GetNotifyMgr().PostNotify(NotifyType.GameInitState, this);
 	}
+
+	public void InitUpdate() {
+
+	}
+
 	public void InitExit() {
 	}
 #endregion
+
+    public virtual void RandomSpawn() {
+        System.Random rnd = new System.Random();
+        int index = rnd.Next(0, 2);
+        GameObject p = spawnPoints[index];
+
+        //GameObject newAnt = Instantiate(GetResourceMgr().goAnt, p.transform.position, Quaternion.identity);
+    }
 }
