@@ -5,12 +5,12 @@ public class InputHandler : ExtBehaviour {
 
 	public float heatRadius = 0.5f;
 
-	ScalarGrid grid;
+//	ScalarGrid grid;
 	Camera mainCamera;
 
 	void Start() {
 		mainCamera = Camera.main;
-		grid = GetComponent<ScalarGrid>();
+//		grid = GetComponent<ScalarGrid>();
 	}
 
 	void Update() {
@@ -27,7 +27,7 @@ public class InputHandler : ExtBehaviour {
 
 	public void HandleTouch(Vector3 screenPoint) {
 		Vector3 floorPoint = RaycastToFloor(screenPoint);
-		grid.HeatPoint(floorPoint, heatRadius);
+//		grid.HeatPoint(floorPoint, heatRadius);
 	}
 
 	public Vector3 RaycastToFloor(Vector3 screenPoint) {

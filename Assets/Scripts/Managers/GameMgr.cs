@@ -65,7 +65,13 @@ public class GameMgr : MonoBehaviour {
 	private GameObject 		goDataMgr = null;
 	
 	private bool			isLoading = true;
-	
+
+	//--------------------------------------------------------------------------------
+	// Game Script references
+	public ScalarGrid grid { get; internal set; }
+	public InputHandler inputter { get; internal set; }
+	public HeatParticles particles { get; internal set; }
+
 	//--------------------------------------------------------------------------------
 	void Awake() {
 		instance = this;
@@ -81,17 +87,19 @@ public class GameMgr : MonoBehaviour {
 	void Start() {
 		Application.targetFrameRate = 60;
 		
+		// Get References of all important objects
+		this.grid = GetComponentInChildren<ScalarGrid>();
+		this.inputter = GetComponentInChildren<InputHandler>();
+		this.particles = GetComponentInChildren<HeatParticles>();
+
 		#if !(UNITY_EDITOR)
 		Util.LogWarning("System Memory " + SystemInfo.systemMemorySize);
 		Util.LogWarning("GPU Memory " + SystemInfo.graphicsMemorySize);
 		
-		if ((Screen.width * Screen.height) <= (1280 * 800))
-		{
+		if ((Screen.width * Screen.height) <= (1280 * 800)) {
 			QualitySettings.masterTextureLimit = 1;
 			Util.LogWarning("Using half texture size");
-		}
-		else
-		{
+		} else {
 			QualitySettings.masterTextureLimit = 0;
 			Util.LogWarning("Using full texture size");
 		}
