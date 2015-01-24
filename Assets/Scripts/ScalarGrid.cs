@@ -128,14 +128,11 @@ public class ScalarGrid : ExtBehaviour {
 	public virtual Ant SpawnAnt() {
 		System.Random rnd = new System.Random();
 		int i = rnd.Next(0, 2);
-        int dir= 1;
-        if (i == 0)
-            dir *= -1;
             
-		GameObject newAnt = Instantiate(GetResourceMgr().goAnt, spawnPoints[i].transform.position, Quaternion.identity) as GameObject;
+		GameObject newAnt = Instantiate(GetResourceMgr().goAnt, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
 		newAnt.transform.parent = gameObject.transform;
 		newAnt.transform.localPosition = spawnPoints[i].transform.localPosition;
-        newAnt.transform.localScale = new Vector3(newAnt.transform.localScale.x, newAnt.transform.localScale.y, newAnt.transform.localScale.z * dir);
+		newAnt.transform.localScale = new Vector3(newAnt.transform.localScale.x, newAnt.transform.localScale.y, newAnt.transform.localScale.z);
 
 		return newAnt.GetComponent<Ant>();
 	}
