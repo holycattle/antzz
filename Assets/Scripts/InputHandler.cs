@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class InputHandler : ExtBehaviour {
 
 	public float heatRadius = 0.5f;
+	public float minInterpolationDistance = 0.2f;
 
 	ScalarGrid grid;
 	ParticleHandler particles;
@@ -40,7 +41,6 @@ public class InputHandler : ExtBehaviour {
 		// Clean out fingers
 		for (int i = 0; i < fingers.Count; i++) {
 			if (!fingers[i].wasUpdated) {
-				Debug.Log("Deleting!");
 				fingers.RemoveAt(i);
 				i--;
 			}
@@ -84,11 +84,28 @@ public class InputHandler : ExtBehaviour {
 			wasNew = true;
 		}
 
-		touch.wasUpdated = true;
-
 		Vector3 floorPoint = RaycastToFloor(screenPoint);
+		HeatParticles touchParticles = particles.Get(touch.particleIndex);
+
+		if (wasNew) {
+			touch.pos = floorPoint;
+		}
+
+		Vector3 toMove = floorPoint - touch.pos;
+		while (toMove.magnitude > minInterpolationDistance) {
+			touch.pos += toMove.normalized * minInterpolationDistance;
+
+			grid.HeatPoint(touch.pos, heatRadius);
+			touchParticles.Particlify(touch.pos);
+
+			toMove = floorPoint - touch.pos;
+		}
+
 		grid.HeatPoint(floorPoint, heatRadius);
-		particles.Get(touch.particleIndex).Particlify(floorPoint, !wasNew);
+		touchParticles.Particlify(floorPoint);
+
+		touch.pos = floorPoint;
+		touch.wasUpdated = true;
 	}
 
 	public Vector3 RaycastToFloor(Vector3 screenPoint) {
@@ -104,6 +121,7 @@ public class InputHandler : ExtBehaviour {
 	private class FingerTouch {
 		public int fingerID;
 		public int particleIndex;
+		public Vector3 pos;
 		public bool wasUpdated;
 	}
 }
