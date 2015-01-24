@@ -9,7 +9,7 @@ public class Ant : ExtBehaviour {
 		Destroy(gameObject);
 	}
 
-	void OnCollisionEnter(Collision c) {
+	protected virtual void OnCollisionEnter(Collision c) {
 		CollectFood(c.gameObject);
 	}
 

@@ -12,6 +12,14 @@ public class ZoneParent : MonoBehaviour {
 		UpdateScoreText();
 	}
 
+    public void DecreaseScore(int penalty) {
+        if (score == 0)
+            return;
+
+        score -= penalty;
+        UpdateScoreText();
+    }
+
 	void UpdateScoreText() {
 		scoreText.text = "" + score + " points";
 	}
