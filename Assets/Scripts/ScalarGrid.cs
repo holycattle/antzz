@@ -196,17 +196,20 @@ public class ScalarGrid : ExtBehaviour {
             return null;
 
         //randomize scale
-        float scaleCoeff = Random.Range(0.2f, 0.9f);
+        float scaleCoeffX = Random.Range(0.2f, 0.9f);
+        float scaleCoeffZ = Random.Range(0.2f, 0.9f);
+        float scaleCoeffArea = (scaleCoeffX * scaleCoeffZ);
+
         GSGame gsGame = (GSGame)GetGameStateMgr().GetCurrentState();
         if (gsGame == null)
             return null;
 
-        if (gsGame.currentObstacleArea + scaleCoeff > GetResourceMgr().totalObstacleArea)
+        if (gsGame.currentObstacleArea + scaleCoeffArea > GetResourceMgr().totalObstacleArea)
             return null;
 
-        gsGame.currentObstacleArea += scaleCoeff;
+        gsGame.currentObstacleArea += scaleCoeffArea;
 
-        newObs.transform.localScale = new Vector3(newObs.transform.localScale.x * scaleCoeff, newObs.transform.localScale.y * scaleCoeff, newObs.transform.localScale.z * scaleCoeff);
+        newObs.transform.localScale = new Vector3(newObs.transform.localScale.x * scaleCoeffX, newObs.transform.localScale.y * scaleCoeffX, newObs.transform.localScale.z * scaleCoeffZ);
 
         //randomize rotation
         float deg = Random.Range(0f, 179f);
