@@ -14,7 +14,9 @@ public struct ResetInfo {
 };
 
 public class GSGame : GameState {
-	private GameObject 			goPlayer = null;
+    [HideInInspector] public float currentObstacleArea = 0f;
+
+    private GameObject 			goPlayer = null;
 	private GameObject 			goCamera = null;
 
 //    private Queue<Ant>          antList = new Queue<Ant>();
@@ -70,18 +72,26 @@ public class GSGame : GameState {
 
 #region Init state
 	public void InitEnter() {
-		//RandomSpawn(10);
-		gameTimer.Reset();
-		spawnDelay.Reset();
-		foodSpawnDelay.Reset();
+        //RandomSpawn(10);
+        gameTimer.Reset();
+        spawnDelay.Reset();
+        foodSpawnDelay.Reset(); 
+        
+        currentObstacleArea = 0.0f;
             
 		if (GetNotifyMgr() != null)
 			GetNotifyMgr().PostNotify(NotifyType.GameInitState, this);
 	}
 
 	public void InitUpdate() {
-		fsm.SetState("Play");
-	}
+        System.Random rnd = new System.Random();
+        GameObject go = GameMgr.Instance.grid.SpawnObstacle(rnd.Next(0, 2));
+
+        if (go == null) {
+            //raycast magic here
+            fsm.SetState("Play");
+	    }
+    }
 
 	public void InitExit() {
 	}
@@ -115,6 +125,14 @@ public class GSGame : GameState {
 		Food[] foodArr = GameMgr.Instance.gameObject.GetComponentsInChildren<Food>();
 		foreach (Food f in foodArr)
 			GameObject.Destroy(f.gameObject);
+
+        NeutralSurface[] ns = GameMgr.Instance.gameObject.GetComponentsInChildren<NeutralSurface>();
+        foreach (NeutralSurface n in ns)
+            GameObject.Destroy(n.gameObject);
+
+        ObstacleSurface[] os = GameMgr.Instance.gameObject.GetComponentsInChildren<ObstacleSurface>();
+        foreach (ObstacleSurface o in os)
+            GameObject.Destroy(o.gameObject);
 	}
 
 	public void EndUpdate() {
@@ -140,11 +158,26 @@ public class GSGame : GameState {
 		ResourceMgr resourceMgr = GameMgr.Instance.GetResourceMgr();
 		Food[] foodArr = GameMgr.Instance.gameObject.GetComponentsInChildren<Food>();
 
-		if (foodArr.Length < resourceMgr.maxFood && foodSpawnDelay.IsReady()) {
-			GameMgr.Instance.grid.SpawnFood();
-			foodSpawnDelay.Reset();
-		} else {
-			foodSpawnDelay.Update(Time.deltaTime);
-		}
-	}
+        if (foodArr.Length < resourceMgr.maxFood && foodSpawnDelay.IsReady())
+        {
+            GameMgr.Instance.grid.SpawnFood();
+            foodSpawnDelay.Reset();
+        } else {
+            foodSpawnDelay.Update(Time.deltaTime);
+        }
+    }
+
+    //move this crap to ScalarGrid
+    private void SpawnObstacles() {
+        System.Random rnd = new System.Random();
+        GameMgr.Instance.grid.SpawnObstacle(rnd.Next(0, 2));
+    }
+
+    private void PopulateNeutralInices() {
+
+    }
+
+    private void PopulateHotIndices() {
+
+    }
 }
