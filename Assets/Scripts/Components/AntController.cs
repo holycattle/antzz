@@ -15,9 +15,13 @@ public class AntController : ExtBehaviour {
 	public float followAngleThreshold = 10f;
 	public float antFollowRange = 4f;
 	public float antFollowArc = 90f;
+	public float antDirectionalFollowThreshold = 135f;
 
 	ScalarGrid grid;
 	ZoneController capturedZoneController;
+
+	bool isScanning = false;
+	float curOffsetAngle = 0f;
 
 	void Start() {
 		grid = GameMgr.Instance.grid;
@@ -28,23 +32,39 @@ public class AntController : ExtBehaviour {
 	}
 	
 	void Update() {
+		float moveSpeedMult = 1f;
 		if (capturedZoneController != null) {
 			Vector3 q = Quaternion.LookRotation(capturedZoneController.transform.position - transform.position).eulerAngles;
 			q.x = 0f;
 			q.z = 0f;
 			transform.rotation = Quaternion.Euler(q);
 		} else {
-			float offsetAngle = Scan();
-			if (Mathf.Abs(offsetAngle) < followAngleThreshold) {
-				float newOffset = ScanAnts();
-				if (newOffset != 0) {
-					offsetAngle = newOffset;
-				}
+			if (!isScanning) {
+				StartCoroutine(UpdateScan());
 			}
 
-			transform.RotateAround(transform.position, Vector3.up, Mathf.Clamp(Mathf.Abs(offsetAngle), 0f, rotateSpeed * Time.deltaTime) * Mathf.Sign(offsetAngle));
+			float amtToTurn = Mathf.Clamp(Mathf.Abs(curOffsetAngle), 0f, rotateSpeed * Time.deltaTime) * Mathf.Sign(curOffsetAngle);
+			transform.RotateAround(transform.position, Vector3.up, amtToTurn);
+			curOffsetAngle -= amtToTurn;
 		}
-		transform.position += transform.forward * Time.deltaTime * moveSpeed;
+		transform.position += transform.forward * Time.deltaTime * moveSpeed * moveSpeedMult;
+	}
+
+	IEnumerator UpdateScan() {
+		isScanning = true;
+		float offsetAngle = Scan();
+		if (Mathf.Abs(offsetAngle) < followAngleThreshold) {
+			float newOffset = ScanAnts();
+			if (newOffset != 0) {
+				offsetAngle = newOffset;
+			}
+		}
+		curOffsetAngle = offsetAngle;
+
+		yield return null;
+
+		isScanning = false;
+//		yield return null;
 	}
 
 	float ScanAnts() {
@@ -59,7 +79,7 @@ public class AntController : ExtBehaviour {
 			if (d < closestDistance) {
 				if (d < antFollowRange) {
 					if (Vector3.Angle(transform.forward, antList[i].transform.position - transform.position) < antFollowArc) {
-						if (Vector3.Angle(transform.forward, antList[i].transform.forward) < 180f) {
+						if (Vector3.Angle(transform.forward, antList[i].transform.forward) < antDirectionalFollowThreshold) {
 							closestIndex = i;
 							closestDistance = d;
 						}
