@@ -25,7 +25,10 @@ public class ZoneParent : ExtBehaviour {
     }
 
 	void UpdateScoreText() {
-		scoreText.text = "" + score + " points";
+        string p = "point";
+        if (score == 0 || score > 1)
+            p += "s";
+		scoreText.text = "" + score + " " + p;
 	}
 
     public void OnNewGame(Notify n) {
