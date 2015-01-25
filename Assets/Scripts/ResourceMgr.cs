@@ -13,6 +13,7 @@ public class ResourceMgr : ExtBehaviour {
 
     public int maxAnts;
     public float soldierAntRatio;
+    public float leaderAntRatio;
     public int antGroupCount;
 
     public int maxFood;

@@ -32,5 +32,4 @@ public class ZoneParent : ExtBehaviour {
         score = 0;
         UpdateScoreText();
     }
-
 }

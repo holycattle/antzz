@@ -216,6 +216,13 @@ public class ScalarGrid : ExtBehaviour {
             newAnt = Instantiate(GetResourceMgr().goAnt, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
         }
 
+        float k = Random.Range(0f, 1f);
+        if (k <= GetResourceMgr().leaderAntRatio) {
+            newAnt.GetComponent<AntController>().followAnt = false;
+        } else {
+            newAnt.GetComponent<AntController>().followAnt = true;
+        }
+
 		newAnt.transform.parent = gameObject.transform;
 		newAnt.transform.localPosition = spawnPoints[i].transform.localPosition;
 		newAnt.transform.localScale = new Vector3(newAnt.transform.localScale.x, newAnt.transform.localScale.y, newAnt.transform.localScale.z);
