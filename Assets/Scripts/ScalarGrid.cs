@@ -8,7 +8,7 @@ public class ScalarGrid : ExtBehaviour {
 	const float minFoodZPos = -4f;
 	const float maxFoodZPos = 4f;
 
-    public Text timer;
+	public Text timer;
 
 	public float xSize;
 	public float zSize;
@@ -207,33 +207,33 @@ public class ScalarGrid : ExtBehaviour {
 	}
 
 	public virtual Ant SpawnAnt() {
-        GameObject newAnt;
-        bool isSoldier;
+		GameObject newAnt;
+		bool isSoldier;
 		System.Random rnd = new System.Random();
 		int i = rnd.Next(0, 2);
 
-        float j = Random.Range(0f, 1f);
-        if (j <= GetResourceMgr().soldierAntRatio) {
-            newAnt = Instantiate(GetResourceMgr().goSoldierAnt, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
-            isSoldier = true;
-        } else {
-            newAnt = Instantiate(GetResourceMgr().goAnt, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
-            isSoldier = false;
-        }
+		float j = Random.Range(0f, 1f);
+		if (j <= GetResourceMgr().soldierAntRatio) {
+			newAnt = Instantiate(GetResourceMgr().goSoldierAnt, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
+			isSoldier = true;
+		} else {
+			newAnt = Instantiate(GetResourceMgr().goAnt, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
+			isSoldier = false;
+		}
 
 		newAnt.transform.parent = gameObject.transform;
 		newAnt.transform.localPosition = spawnPoints[i].transform.localPosition;
 		newAnt.transform.localScale = new Vector3(newAnt.transform.localScale.x, newAnt.transform.localScale.y, newAnt.transform.localScale.z);
 
-        if (isSoldier)
-            return newAnt.GetComponent<Ant>();
+		if (isSoldier)
+			return newAnt.GetComponent<Ant>();
 
-        float k = Random.Range(0f, 1f);
-        if (k <= GetResourceMgr().leaderAntRatio) {
-            newAnt.GetComponent<AntController>().followAnt = false;
-        } else {
-            newAnt.GetComponent<AntController>().followAnt = true;
-        }
+		float k = Random.Range(0f, 1f);
+		if (k <= GetResourceMgr().leaderAntRatio) {
+			newAnt.GetComponent<AntController>().followAnt = false;
+		} else {
+			newAnt.GetComponent<AntController>().followAnt = true;
+		}
 
 		return newAnt.GetComponent<Ant>();
 	}
@@ -241,7 +241,7 @@ public class ScalarGrid : ExtBehaviour {
 	public virtual Food SpawnFood() {
 		GameObject newFood = (GameObject)Instantiate(GetResourceMgr().goFood);
 		newFood.transform.parent = gameObject.transform;
-		Vector3 rndPos = new Vector3(Random.Range(-7f, 7f), foodYPos, Random.Range(minFoodZPos, maxFoodZPos));
+		Vector3 rndPos = new Vector3(Random.Range(-4, 4f), foodYPos, Random.Range(minFoodZPos, maxFoodZPos));
 		newFood.transform.localPosition = rndPos;
 
 		return newFood.GetComponent<Food>();

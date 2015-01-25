@@ -6,7 +6,7 @@ public class AntController : ExtBehaviour {
 
 	private static AntController[] antList;
 
-    public bool followAnt;
+	public bool followAnt;
 
 	public float moveSpeed = 1f; // units per second
 	public float rotateSpeed = 360f; // degrees per second
@@ -56,14 +56,14 @@ public class AntController : ExtBehaviour {
 		isScanning = true;
 		float offsetAngle = Scan();
 
-        if (followAnt) {
-            if (Mathf.Abs(offsetAngle) < followAngleThreshold) {
-                float newOffset = ScanAnts();
-                if (newOffset != 0) {
-                    offsetAngle = newOffset;
-                }
-            }
-        }
+		if (followAnt) {
+			if (Mathf.Abs(offsetAngle) < followAngleThreshold) {
+				float newOffset = ScanAnts();
+				if (newOffset != 0) {
+					offsetAngle = newOffset;
+				}
+			}
+		}
         
 		curOffsetAngle = offsetAngle;
 

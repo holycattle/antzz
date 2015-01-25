@@ -16,7 +16,7 @@ public struct ResetInfo {
 public class GSGame : GameState {
 	public float currentObstacleArea = 0f;
 
-    private float secondTimer;
+	private float secondTimer;
 
 	private GameObject 			goPlayer = null;
 	private GameObject 			goCamera = null;
@@ -48,14 +48,14 @@ public class GSGame : GameState {
 	}
 
 	void InitFSM() {
-        fsm.AddState("Wait", WaitEnter, WaitUpdate, WaitExit, true);
+		fsm.AddState("Wait", WaitEnter, WaitUpdate, WaitExit, true);
 		fsm.AddState("Init", InitEnter, InitUpdate, InitExit);
 		fsm.AddState("Play", PlayEnter, PlayUpdate, PlayExit);
 		fsm.AddState("End", EndEnter, EndUpdate, EndExit);
 	}
 
 	void AddListeners() {
-        GetNotifyMgr().AddListener(NotifyType.NewGame, OnNewGame);
+		GetNotifyMgr().AddListener(NotifyType.NewGame, OnNewGame);
 	}
 
 	void AddToReset(GameObject g) {
@@ -78,7 +78,7 @@ public class GSGame : GameState {
         
 		currentObstacleArea = 0.0f;
         
-        GameMgr.Instance.grid.timer.text = ((int)gameTimer.current).ToString() + " sec.";
+		GameMgr.Instance.grid.timer.text = ((int)gameTimer.current).ToString() + " sec.";
 
 		if (GetNotifyMgr() != null)
 			GetNotifyMgr().PostNotify(NotifyType.GameInitState, this);
@@ -96,28 +96,28 @@ public class GSGame : GameState {
 	}
 #endregion
 
-    public void WaitEnter() {
-        GetNotifyMgr().PostNotify(NotifyType.GameTimerUp, this);
-    }
+	public void WaitEnter() {
+		GetNotifyMgr().PostNotify(NotifyType.GameTimerUp, this);
+	}
 
-    public void WaitUpdate() {
+	public void WaitUpdate() {
 
-    }
+	}
 
-    public void WaitExit() {
+	public void WaitExit() {
 
-    }
+	}
 
 	public void PlayEnter() {
 	}
 
 	public void PlayUpdate() {
 		gameTimer.Update(Time.deltaTime);
-        secondTimer += Time.deltaTime;
-        if (secondTimer >= 1.0f) {
-            GameMgr.Instance.grid.timer.text = ((int)gameTimer.current).ToString() + " sec.";
-            secondTimer = 0.0f;
-        }
+		secondTimer += Time.deltaTime;
+		if (secondTimer >= 1.0f) {
+			GameMgr.Instance.grid.timer.text = ((int)gameTimer.current).ToString() + " sec.";
+			secondTimer = 0.0f;
+		}
 		SpawnAnt();
 		SpawnFood();
 
@@ -188,8 +188,8 @@ public class GSGame : GameState {
 	private void PopulateHotIndices() {
 	}
 
-    public void OnNewGame(Notify n) {
-        Debug.Log("new game!");
-        fsm.SetState("Init");
-    }
+	public void OnNewGame(Notify n) {
+		Debug.Log("new game!");
+		fsm.SetState("Init");
+	}
 }
