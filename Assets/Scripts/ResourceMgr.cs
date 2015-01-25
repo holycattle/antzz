@@ -6,7 +6,9 @@ public class ResourceMgr : ExtBehaviour {
     public GameObject goSoldierAnt;
     public GameObject goFood;
     public GameObject goTermite;
-    
+   
+    public GameObject damageCounter;
+
     public GameObject goNeutralSurface;
     public GameObject goExtremeSurface;
 
