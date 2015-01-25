@@ -11,6 +11,9 @@ public class Food : ExtBehaviour {
     }
 
     void Update() {
+        if (isOwned)
+            return;
+
         decayTimer.Update(Time.deltaTime);
 
         if (decayTimer.IsReady())
