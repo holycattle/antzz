@@ -60,6 +60,7 @@ public class InputHandler : ExtBehaviour {
 			touch = new FingerTouch();
 			touch.fingerID = fingerIndex;
 			touch.particleIndex = -1;
+			touch.isTouchDown = true;
 
 			// Look for an available particleIndex
 			for (int i = 0; i < particles.numHandlersToSpawn; i++) {
@@ -84,9 +85,11 @@ public class InputHandler : ExtBehaviour {
 			wasNew = true;
 		}
 
-		Termite t = RaycastTermite(screenPoint);
-		if (t != null) {
-			Debug.Log("Termite hit!");
+		if (touch.isTouchDown) { 
+			Termite t = RaycastTermite(screenPoint);
+			if (t != null) {
+				t.Damage();
+			}
 		}
 
 		Vector3? rayHit = RaycastToFloor(screenPoint);
@@ -116,6 +119,7 @@ public class InputHandler : ExtBehaviour {
 
 		touch.pos = floorPoint;
 		touch.wasUpdated = true;
+		touch.isTouchDown = false;
 	}
 
 	public Vector3? RaycastToFloor(Vector3 screenPoint) {
@@ -141,5 +145,6 @@ public class InputHandler : ExtBehaviour {
 		public int particleIndex;
 		public Vector3 pos;
 		public bool wasUpdated;
+		public bool isTouchDown;
 	}
 }

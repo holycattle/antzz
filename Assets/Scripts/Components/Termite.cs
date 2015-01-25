@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Termite : SoldierAnt {
 
-	int life = 10;
+	public int life = 10;
 
 	public void Damage() {
 		life--;
@@ -12,5 +12,6 @@ public class Termite : SoldierAnt {
 		}
 	}
 
-    protected override void OnCollisionEnter(Collision c) {}
+	protected override void OnCollisionEnter(Collision c) {
+	}
 }
