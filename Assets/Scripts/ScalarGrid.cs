@@ -208,7 +208,7 @@ public class ScalarGrid : ExtBehaviour {
 
 	public virtual Ant SpawnAnt() {
 		GameObject newAnt;
-		bool isSoldier;
+		bool isSoldier = false;
 		System.Random rnd = new System.Random();
 		int i = rnd.Next(0, 2);
 
@@ -216,9 +216,10 @@ public class ScalarGrid : ExtBehaviour {
 		if (j <= GetResourceMgr().soldierAntRatio) {
 			newAnt = Instantiate(GetResourceMgr().goSoldierAnt, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
 			isSoldier = true;
-		} else {
+		} else if (j <= GetResourceMgr().termiteRatio) {
+            newAnt = Instantiate(GetResourceMgr().goTermite, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
+        } else {
 			newAnt = Instantiate(GetResourceMgr().goAnt, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
-			isSoldier = false;
 		}
 
 		newAnt.transform.parent = gameObject.transform;
