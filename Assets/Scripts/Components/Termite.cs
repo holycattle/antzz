@@ -13,5 +13,9 @@ public class Termite : SoldierAnt {
 	}
 
 	protected override void OnCollisionEnter(Collision c) {
+		Ant a = c.collider.GetComponent<Ant>();
+		if (a != null) {
+			a.KillAnt();
+		}
 	}
 }

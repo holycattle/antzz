@@ -134,7 +134,7 @@ public class InputHandler : ExtBehaviour {
 	public Termite RaycastTermite(Vector3 screenPoint) {
 		Ray r = mainCamera.ScreenPointToRay(screenPoint);
 		RaycastHit hit;
-		if (Physics.Raycast(r, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("SoldierAnt"))) {
+		if (Physics.Raycast(r, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Termite"))) {
 			return hit.collider.GetComponentInParent<Termite>();
 		}
 		return null;
