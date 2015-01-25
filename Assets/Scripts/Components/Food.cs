@@ -6,6 +6,10 @@ public class Food : ExtBehaviour {
     private bool isOwned;
     private Counter decayTimer = new Counter();
 
+    void Start() {
+        decayTimer.SetLimit(timeLimit);
+    }
+
     void Update() {
         decayTimer.Update(Time.deltaTime);
 
