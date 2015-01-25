@@ -1,40 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
 	
-public class ExtBehaviour : MonoBehaviour
-{
-		public NotifyMgr GetNotifyMgr ()
-		{
-				if (GameMgr.Instance == null)
-						return null;
-				return GameMgr.Instance.GetNotifyMgr ();
-		}
+public class ExtBehaviour : MonoBehaviour {
+	public NotifyMgr GetNotifyMgr() {
+		if (GameMgr.Instance == null)
+			return null;
+		return GameMgr.Instance.GetNotifyMgr();
+	}
 	
-		public ResourceMgr GetResourceMgr ()
-		{
-				if (GameMgr.Instance == null)
-						return null;
-				return GameMgr.Instance.GetResourceMgr ();
-		}
+	public ResourceMgr GetResourceMgr() {
+		if (GameMgr.Instance == null)
+			return null;
+		return GameMgr.Instance.GetResourceMgr();
+	}
 
-		/*public UIMgr GetUIMgr() {
+	/*public UIMgr GetUIMgr() {
 		if (GameMgr.Instance == null) return null;
 		return GameMgr.Instance.GetUIMgr();
 	}*/
 	
-		public GameStateMgr GetGameStateMgr ()
-		{
-				if (GameMgr.Instance == null)
-						return null;
-				return GameMgr.Instance.GetGameStateMgr ();
-		}
+	public GameStateMgr GetGameStateMgr() {
+		if (GameMgr.Instance == null)
+			return null;
+		return GameMgr.Instance.GetGameStateMgr();
+	}
 
-		/*public UserDataMgr GetUserDataMgr() {
+	/*public UserDataMgr GetUserDataMgr() {
 		if (GameMgr.Instance == null) return null;
 		return GameMgr.GetUDM();
 	}*/
 	
-		/*public AudioMgr GetAudioMgr() {
+	/*public AudioMgr GetAudioMgr() {
 		if (GameMgr.Instance == null) return null;
 		return GameMgr.Instance.GetAudioMgr();
 	}*/

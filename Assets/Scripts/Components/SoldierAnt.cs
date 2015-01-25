@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class SoldierAnt : Ant {
-    public int penalty;
+	public int penalty;
 
-    protected override void OnCollisionEnter(Collision c) {}
+	protected override void OnCollisionEnter(Collision c) {
+	}
 }

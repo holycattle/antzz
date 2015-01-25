@@ -84,6 +84,11 @@ public class InputHandler : ExtBehaviour {
 			wasNew = true;
 		}
 
+		Termite t = RaycastTermite(screenPoint);
+		if (t != null) {
+			Debug.Log("Termite hit!");
+		}
+
 		Vector3? rayHit = RaycastToFloor(screenPoint);
 		if (rayHit == null) {
 			return;
@@ -118,6 +123,15 @@ public class InputHandler : ExtBehaviour {
 		RaycastHit hit;
 		if (Physics.Raycast(r, out hit, Mathf.Infinity)) {
 			return hit.point;
+		}
+		return null;
+	}
+
+	public Termite RaycastTermite(Vector3 screenPoint) {
+		Ray r = mainCamera.ScreenPointToRay(screenPoint);
+		RaycastHit hit;
+		if (Physics.Raycast(r, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("SoldierAnt"))) {
+			return hit.collider.GetComponentInParent<Termite>();
 		}
 		return null;
 	}

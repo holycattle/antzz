@@ -217,8 +217,8 @@ public class ScalarGrid : ExtBehaviour {
 			newAnt = Instantiate(GetResourceMgr().goSoldierAnt, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
 			isSoldier = true;
 		} else if (j <= GetResourceMgr().termiteRatio) {
-            newAnt = Instantiate(GetResourceMgr().goTermite, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
-        } else {
+			newAnt = Instantiate(GetResourceMgr().goTermite, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
+		} else {
 			newAnt = Instantiate(GetResourceMgr().goAnt, spawnPoints[i].transform.position, spawnPoints[i].transform.rotation) as GameObject;
 		}
 
