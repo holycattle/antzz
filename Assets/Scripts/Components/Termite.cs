@@ -12,4 +12,5 @@ public class Termite : SoldierAnt {
 		}
 	}
 
+    protected override void OnCollisionEnter(Collision c) {}
 }
