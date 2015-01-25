@@ -10,15 +10,16 @@ public class GameState {
 	
 	public GameObject goBase { get; set; }
 	
-	public GameState() {}
+	public GameState () {
+	}
 	
 	public NotifyMgr GetNotifyMgr() {
 		return GameMgr.Instance.GetNotifyMgr();
 	}
 
-    public ResourceMgr GetResourceMgr() {
-        return GameMgr.Instance.GetResourceMgr();
-    }
+	public ResourceMgr GetResourceMgr() {
+		return GameMgr.Instance.GetResourceMgr();
+	}
 
 	/*public UIMgr GetUIMgr() {
 		return GameMgr.Instance.GetUIMgr();
@@ -38,9 +39,11 @@ public class GameState {
 			GetGameStateMgr().SetState(name);
 	}
 	
-	public virtual void Enter()	{}
+	public virtual void Enter() {
+	}
 	
-	public virtual void Update() {}
+	public virtual void Update() {
+	}
 	
 	public virtual void Exit() {
 		if (sceneGameObject)
@@ -60,5 +63,6 @@ public class GameState {
 		return true;
 	}
 	
-	public virtual void OnGameDisabled(Notify n) {}
+	public virtual void OnGameDisabled(Notify n) {
+	}
 }
