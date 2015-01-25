@@ -2,7 +2,16 @@
 using System.Collections;
 
 public class Food : ExtBehaviour {
+    public float timeLimit;
     private bool isOwned;
+    private Counter decayTimer = new Counter();
+
+    void Update() {
+        decayTimer.Update(Time.deltaTime);
+
+        if (decayTimer.IsReady())
+            Destroy(gameObject);
+    }
 
     public bool IsOwned() {
         return isOwned;

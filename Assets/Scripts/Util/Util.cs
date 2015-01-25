@@ -160,32 +160,6 @@ public class Util {
 		return Color.white;
 	}
 	
-	static public bool SetAnimation(GameObject go, string name, string powerup) {
-		if (go == null)
-			return false;
-		
-		AnimatorHelper helper = go.GetComponent<AnimatorHelper>();
-		if (helper == null)
-			return false;
-		
-		return helper.SetAnimation(name, powerup);
-	}
-	
-	static public bool SetAnimation(GameObject go, string name) {
-		return SetAnimation(go, name, "");
-	}
-	
-	static public bool IsAnimationPlaying(GameObject go, string name) {
-		if (go == null)
-			return false;
-		
-		AnimatorHelper helper = go.GetComponent<AnimatorHelper>();
-		if (helper == null)
-			return false;
-		
-		return helper.IsPlaying(name);
-	}
-	
 	static float worldScreenHeight = -1.0f;
 	static float worldScreenWidth = -1.0f;
 	static float halfHeight = -1.0f;
