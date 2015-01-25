@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,6 +7,8 @@ public class ScalarGrid : ExtBehaviour {
 	const float foodYPos = 0.15f;
 	const float minFoodZPos = -4f;
 	const float maxFoodZPos = 4f;
+
+    public Text timer;
 
 	public float xSize;
 	public float zSize;

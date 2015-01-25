@@ -16,6 +16,8 @@ public struct ResetInfo {
 public class GSGame : GameState {
 	public float currentObstacleArea = 0f;
 
+    private float secondTimer;
+
 	private GameObject 			goPlayer = null;
 	private GameObject 			goCamera = null;
 
@@ -75,7 +77,9 @@ public class GSGame : GameState {
 		foodSpawnDelay.Reset(); 
         
 		currentObstacleArea = 0.0f;
-            
+        
+        GameMgr.Instance.grid.timer.text = ((int)gameTimer.current).ToString() + " sec.";
+
 		if (GetNotifyMgr() != null)
 			GetNotifyMgr().PostNotify(NotifyType.GameInitState, this);
 	}
@@ -109,6 +113,11 @@ public class GSGame : GameState {
 
 	public void PlayUpdate() {
 		gameTimer.Update(Time.deltaTime);
+        secondTimer += Time.deltaTime;
+        if (secondTimer >= 1.0f) {
+            GameMgr.Instance.grid.timer.text = ((int)gameTimer.current).ToString() + " sec.";
+            secondTimer = 0.0f;
+        }
 		SpawnAnt();
 		SpawnFood();
 
