@@ -149,6 +149,8 @@ public class GSGame : GameState {
 		ObstacleSurface[] os = GameMgr.Instance.gameObject.GetComponentsInChildren<ObstacleSurface>();
 		foreach (ObstacleSurface o in os)
 			GameObject.Destroy(o.gameObject);
+
+        GameMgr.Instance.grid.ClearLevel();
 	}
 
 	public void EndUpdate() {

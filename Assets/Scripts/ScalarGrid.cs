@@ -25,6 +25,12 @@ public class ScalarGrid : ExtBehaviour {
 	int height;
 	public bool showGridValues;
 
+    public void ClearLevel() {
+		grid = new float[width * height];
+		locked = new bool[grid.Length];
+		activeIndices = new List<int>((int)(grid.Length * 0.4f));        
+    }
+
 	void Awake() {
 		width = Mathf.CeilToInt(xSize / gridSize);
 		height = Mathf.CeilToInt(zSize / gridSize);
