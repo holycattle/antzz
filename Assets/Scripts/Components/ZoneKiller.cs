@@ -11,6 +11,13 @@ public class ZoneKiller : ExtBehaviour {
             return;
         }
 
+        Termite t = c.gameObject.GetComponent<Termite>();
+        if (s != null) {
+            GetComponentInParent<ZoneParent>().DecreaseScore(t.penalty);
+            t.KillAnt();
+            return;
+        }
+
         Ant a = c.gameObject.GetComponent<Ant>();
 		if (a != null) {
 			if (a.hasFood) {
